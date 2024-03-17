@@ -516,6 +516,7 @@ GameObject:
   - component: {fileID: 983733517}
   - component: {fileID: 983733516}
   - component: {fileID: 983733520}
+  - component: {fileID: 983733521}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -611,6 +612,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ca7c0ecb628f654a872b157e3b7f8e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &983733521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983733515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ded018909b73da43a118866dbafbcc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCam: {fileID: 1651332343}
+  selectableTag: Selectable
+  defaultMaterial: {fileID: 2100000, guid: 9c2dcabb5fa14204aa0ba759bcb2ba32, type: 2}
+  highlightMaterial: {fileID: 2100000, guid: dd11a98d5843aa942957d641433bacc7, type: 2}
 --- !u!1 &1275196491
 GameObject:
   m_ObjectHideFlags: 0
@@ -624,9 +641,10 @@ GameObject:
   - component: {fileID: 1275196493}
   - component: {fileID: 1275196492}
   - component: {fileID: 1275196496}
+  - component: {fileID: 1275196497}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Untagged
+  m_TagString: Selectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -719,6 +737,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdb43b187ee491a4cbb28fe2be607d5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1275196497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1275196491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ded018909b73da43a118866dbafbcc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetCam: {fileID: 1651332343}
+  selectableTag: Selectable
+  defaultMaterial: {fileID: 2100000, guid: eeab3d7d19399254f96a525d18b9769d, type: 2}
+  highlightMaterial: {fileID: 2100000, guid: dd11a98d5843aa942957d641433bacc7, type: 2}
 --- !u!1 &1651332341
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,6 +952,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44a3c3dcc28220247a3036548e0b1990, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightMaterial: {fileID: 2100000, guid: dd11a98d5843aa942957d641433bacc7, type: 2}
   InteractorSource: {fileID: 1651332344}
   InteractRange: 10
