@@ -24,7 +24,9 @@ public class FPSController : MonoBehaviour
     public bool canMove = true;
 
     CharacterController characterControl;
-
+    float currentSpeedX = 0;
+    float currentSpeedY = 0;
+    float movementDirectionY = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -41,9 +43,9 @@ public class FPSController : MonoBehaviour
         Vector3 forward =  transform.TransformDirection(Vector3.forward);
         Vector3 right = transform.TransformDirection(Vector3.right);
 
-        float currentSpeedX = canMove ? walkSpeed * Input.GetAxis("Vertical") : 0;
-        float currentSpeedY = canMove ? walkSpeed * Input.GetAxis("Horizontal") : 0;
-        float movementDirectionY = moveDirection.y;
+        currentSpeedX = canMove ? walkSpeed * Input.GetAxis("Vertical") : 0;
+        currentSpeedY = canMove ? walkSpeed * Input.GetAxis("Horizontal") : 0;
+        movementDirectionY = moveDirection.y;
         moveDirection = (forward * currentSpeedX) + (right * currentSpeedY);
 
         //Mouse rotation handler
