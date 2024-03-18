@@ -519,7 +519,7 @@ GameObject:
   - component: {fileID: 983733521}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Selectable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -644,7 +644,7 @@ GameObject:
   - component: {fileID: 1275196497}
   m_Layer: 0
   m_Name: Cube (2)
-  m_TagString: Selectable
+  m_TagString: selectable2
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -750,7 +750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetCam: {fileID: 1651332343}
-  selectableTag: Selectable
+  selectableTag: selectable2
   defaultMaterial: {fileID: 2100000, guid: eeab3d7d19399254f96a525d18b9769d, type: 2}
   highlightMaterial: {fileID: 2100000, guid: dd11a98d5843aa942957d641433bacc7, type: 2}
 --- !u!1 &1651332341

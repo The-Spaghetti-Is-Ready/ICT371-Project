@@ -2,14 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO: use layering instead of tag comparison
+
 public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private Camera targetCam; //defines which camera is allowed to select the object with selection manager
-    [SerializeField] private string selectableTag = "Selectable";
+    [SerializeField] private string selectableTag;
     [SerializeField] private Material defaultMaterial;
     [SerializeField] private Material highlightMaterial;
 
     private Transform _selection;
+    Renderer selectionRenderer;
     private Ray r;
 
     // Update is called once per frame
@@ -29,13 +32,20 @@ public class SelectionManager : MonoBehaviour
             var selection = hit.transform;
             if(selection.CompareTag(selectableTag))
             {
-                var selectionRenderer = selection.GetComponent<Renderer>();
+                selectionRenderer = selection.GetComponent<Renderer>();
                 if(selectionRenderer != null)
                 {
                     selectionRenderer.material = highlightMaterial;
                 }
                 _selection = selection;
             }
+            // else
+            // {
+            //     if(selectionRenderer != null)
+            //     {
+            //         selectionRenderer.material = defaultMaterial;
+            //     }
+            // }
         }
     }
 }

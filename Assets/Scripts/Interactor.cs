@@ -14,12 +14,12 @@ public class Interactor : MonoBehaviour //The object that goes an interacts with
 {
     private Ray r;
     public Transform InteractorSource; //A reference to a transform from where a ray will be casted. If added to player, then the source transform needs to be the player camera.
-    public float InteractRange; //length of interact raycast (in meters)
+    public float InteractRange = 10; //length of interact raycast (in meters)
 
     // Update is called once per frame
     void Update()
     {
-        //Vector3 debugRayRange = InteractorSource.forward * InteractRange; //doing this to get visual feedback for ray range when debugging
+        Vector3 debugRayRange = InteractorSource.forward * InteractRange; //doing this to get visual feedback for ray range when debugging
         Debug.DrawRay(InteractorSource.position, InteractorSource.forward, Color.green); //draw the ray for debug purposes
 
         r = new Ray(InteractorSource.position, InteractorSource.forward); //The ray being cast from object. TODO: optimize this so that we're not creating a new ray every frame, as it could maybe slow things down
