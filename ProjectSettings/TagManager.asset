@@ -9,6 +9,8 @@ TagManager:
   - Destroyer
   - MiniWorldCamera
   - Water
+  - CinemachineTarget
+  - Teleport
   layers:
   - Default
   - TransparentFX

@@ -63,6 +63,8 @@ namespace StarterAssets
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
 		private float _fallTimeoutDelta;
+		
+		public bool disabled = false;
 
 	
 #if ENABLE_INPUT_SYSTEM && STARTER_ASSETS_PACKAGES_CHECKED
@@ -112,9 +114,12 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			JumpAndGravity();
-			GroundedCheck();
-			Move();
+			if (!disabled)
+			{
+				JumpAndGravity();
+				GroundedCheck();
+				Move();
+			}
 		}
 
 		private void LateUpdate()
