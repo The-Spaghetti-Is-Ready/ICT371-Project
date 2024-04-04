@@ -20,7 +20,6 @@ public class DialogueTrigger : MonoBehaviour
 }
 
 [System.Serializable]
-
 public class dialogueString
 {
     public string text;
