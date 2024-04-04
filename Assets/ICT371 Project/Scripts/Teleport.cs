@@ -4,21 +4,12 @@ using UnityEngine;
 using StarterAssets;
 public class Teleport : MonoBehaviour
 {
-    // FirstPersonController playerController;
-    // // Start is called before the first frame update
-    //
-    // void Awake()
-    // {
-    //     playerController = GameObject.Find("");
-    // }
-    //
 
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject playerGameObject;
-    // private FirstPersonController firstPersonController;
     void Start()
     {
-        // firstPersonController = playerGameObject.GetComponent<FirstPersonController>();
+        
     }
 
     // Update is called once per frame
@@ -34,8 +25,8 @@ public class Teleport : MonoBehaviour
             playerGameObject.GetComponent<FirstPersonController>().disabled = true;
             Debug.Log("Enter");
             
-            playerTransform.position.Set(11.18f, transform.position.y, transform.position.z);
-
+            playerGameObject.GetComponent<CharacterController>().Move(new Vector3(11.18f, 0f, 0f));
+            
             playerGameObject.GetComponent<FirstPersonController>().disabled = false;
         }
     }
