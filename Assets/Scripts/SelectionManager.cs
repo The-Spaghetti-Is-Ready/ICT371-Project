@@ -30,22 +30,21 @@ public class SelectionManager : MonoBehaviour
         if(Physics.Raycast(r, out hit))
         {
             var selection = hit.transform;
-            if(selection.CompareTag(selectableTag))
+           
+            selectionRenderer = selection.GetComponent<Renderer>();
+            if(selectionRenderer != null)
             {
-                selectionRenderer = selection.GetComponent<Renderer>();
+                selectionRenderer.material = highlightMaterial;
+            }
+            else
+            {
                 if(selectionRenderer != null)
                 {
-                    selectionRenderer.material = highlightMaterial;
+                    selectionRenderer.material = defaultMaterial;
                 }
-                _selection = selection;
             }
-            // else
-            // {
-            //     if(selectionRenderer != null)
-            //     {
-            //         selectionRenderer.material = defaultMaterial;
-            //     }
-            // }
+            _selection = selection;
+        
         }
     }
 }
