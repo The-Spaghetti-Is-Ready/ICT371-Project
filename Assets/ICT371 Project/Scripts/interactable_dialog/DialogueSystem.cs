@@ -1,86 +1,78 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Events;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
-public class DialogueManager : MonoBehaviour
+public class DialogueSystem : MonoBehaviour
 {
+    [System.Serializable]
+    private class DialogString
+    {
+        [Header("Message")]
+        public string text;
+        public bool isEnd;
+
+        [Header("Branch")]
+        public bool isQuestion;
+        public string answerOption1;
+        public string answerOption2;
+        public string answerOption3;
+        public int option1IndexJump;
+        public int option2IndexJump;
+        public int option3IndexJump;
+
+        [Header("Events")]
+        public UnityEvent startDialogueEvent;
+        public UnityEvent endDialogueEvent;
+    }
+
     [SerializeField] private GameObject dialogueParent;
     [SerializeField] private TMP_Text dialogueText;
     [SerializeField] private Button option1Button;
     [SerializeField] private Button option2Button;
     [SerializeField] private Button option3Button;
-
     [SerializeField] private float typingSpeed = 0.05f;
-    [SerializeField] private float turnSpeed = 2f;
-
-    private List<dialogueString> dialogueList;
-
-    [Header("Player")]
-    [SerializeField] private FPSController firstPersonController;
-    private Transform playerCamera;
+    [SerializeField] private List<dialogueString> dialogueList = new List<dialogueString>();
 
     private int currentDialogueIndex = 0;
-
-    private void Start()
-    {
-        dialogueParent.SetActive(false);
-        playerCamera = Camera.main.transform;
-    }
-
-    public void DialogueStart(List<dialogueString> textToPrint, Transform NPC)
-    {
-        dialogueParent.SetActive(true);
-
-        if (firstPersonController)
-            firstPersonController.enabled = false;
-
-        Cursor.lockState = CursorLockMode.None;
-        Cursor.visible = true;
-
-        if (NPC)
-            StartCoroutine(TurnCameraTowardsNPC(NPC));
-
-        dialogueList = textToPrint;
-        currentDialogueIndex = 0;
-
-        DisableButtons();
-
-        StartCoroutine(PrintDialogue());
-    }
-
-    private void DisableButtons()
-    {
-        option1Button.interactable = false;
-        option2Button.interactable = false;
-        option3Button.interactable = false;
-
-        option1Button.GetComponentInChildren<TMP_Text>().text = "No Option";
-        option2Button.GetComponentInChildren<TMP_Text>().text = "No Option";
-        option3Button.GetComponentInChildren<TMP_Text>().text = "No Option";
-    }
-
-    private IEnumerator TurnCameraTowardsNPC(Transform NPC)
-    {
-        Quaternion startRotation = playerCamera.rotation;
-        Quaternion targetRotation = Quaternion.LookRotation(NPC.position - playerCamera.position);
-
-        float elapsedTime = 0f;
-        while(elapsedTime < 1f)
-        {
-            playerCamera.rotation = Quaternion.Slerp(startRotation, targetRotation, elapsedTime);
-            elapsedTime += Time.deltaTime * turnSpeed;
-            yield return null;
-        }
-
-        playerCamera.rotation = targetRotation;
-    }
-
+    private bool initialized = false;
     private bool optionSelected = false;
 
-    private IEnumerator PrintDialogue()
+    // Start is called before the first frame update
+    void Start()
+    {
+        HideDialogWindow();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+
+    public void StartDialog()
+    {
+        if (initialized)
+            return;
+
+        initialized = true;
+
+        StartCoroutine(ProcessDialog());
+    }
+
+    public void HideDialogWindow()
+    {
+        dialogueParent.SetActive(false);
+    }
+
+    public void ShowDialogWindow()
+    {
+        dialogueParent.SetActive(true);
+    }
+
+    private IEnumerator ProcessDialog()
     {
         while(currentDialogueIndex < dialogueList.Count)
         {
@@ -119,6 +111,17 @@ public class DialogueManager : MonoBehaviour
         DialogueStop();
     }
 
+    private void DisableButtons()
+    {
+        option1Button.interactable = false;
+        option2Button.interactable = false;
+        option3Button.interactable = false;
+
+        option1Button.GetComponentInChildren<TMP_Text>().text = "No Option";
+        option2Button.GetComponentInChildren<TMP_Text>().text = "No Option";
+        option3Button.GetComponentInChildren<TMP_Text>().text = "No Option";
+    }
+
     private void HandleOptionSelected(int indexJump)
     {
         optionSelected = true;
@@ -153,18 +156,6 @@ public class DialogueManager : MonoBehaviour
     private void DialogueStop()
     {
         StopAllCoroutines();
-        
-        dialogueText.text = "";
-        dialogueParent.SetActive(false);
-
-        if (firstPersonController)
-            firstPersonController.enabled = true;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        HideDialogWindow();
     }
-    
 }
-
-
-
