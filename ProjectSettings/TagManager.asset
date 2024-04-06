@@ -11,6 +11,8 @@ TagManager:
   - Water
   - Selectable
   - selectable2
+  - CinemachineTarget
+  - Teleport
   layers:
   - Default
   - TransparentFX
