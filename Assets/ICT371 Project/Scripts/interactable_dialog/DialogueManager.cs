@@ -33,12 +33,15 @@ public class DialogueManager : MonoBehaviour
     public void DialogueStart(List<dialogueString> textToPrint, Transform NPC)
     {
         dialogueParent.SetActive(true);
-        firstPersonController.enabled = false;
+
+        if (firstPersonController)
+            firstPersonController.enabled = false;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        StartCoroutine(TurnCameraTowardsNPC(NPC));
+        if (NPC)
+            StartCoroutine(TurnCameraTowardsNPC(NPC));
 
         dialogueList = textToPrint;
         currentDialogueIndex = 0;
