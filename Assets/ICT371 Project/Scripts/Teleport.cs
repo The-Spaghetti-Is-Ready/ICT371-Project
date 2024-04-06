@@ -4,31 +4,65 @@ using UnityEngine;
 using StarterAssets;
 public class Teleport : MonoBehaviour
 {
-
-    [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject playerGameObject;
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private GameObject bedroomTrigger;
+    [SerializeField] private List<GameObject> bedroomTeleportAnchors;
 
+    [SerializeField] private float teleportCooldown;
+    private int chanceOfBedroomChanging;
+    private bool isTeleporting = false;
+    
+    
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Teleport")
+        if ((other.gameObject.name == bedroomTrigger.name) && !isTeleporting)
         {
-            playerGameObject.GetComponent<FirstPersonController>().disabled = true;
-            Debug.Log("Enter");
+            isTeleporting = true;
+            chanceOfBedroomChanging = Random.Range(0, 10);
             
-            playerGameObject.GetComponent<CharacterController>().Move(new Vector3(11.18f, 0f, 0f));
-            
-            playerGameObject.GetComponent<FirstPersonController>().disabled = false;
+            if (chanceOfBedroomChanging < 5) {
+                Debug.Log("Teleporting to Bedroom Variant 1");
+                teleportToRoom(bedroomTeleportAnchors[0]);
+            }
+            else {
+                Debug.Log("Teleporting to Bedroom Variant 2");
+                teleportToRoom(bedroomTeleportAnchors[1]);
+            }
+        }
+        else
+        {
+            foreach (GameObject bedroomTeleportAnchor in bedroomTeleportAnchors)
+            {
+                if ((other.gameObject.name == bedroomTeleportAnchor.name) && !isTeleporting)
+                {
+                    isTeleporting = true;
+                    teleportToRoom(bedroomTrigger);
+                    break;
+                }
+            }
         }
     }
+
+    private void teleportToRoom(GameObject room)
+    {
+        StartCoroutine(ResetTeleportFlag());
+        Invoke("ResetTeleportFlag", teleportCooldown);
+        
+        playerGameObject.GetComponent<FirstPersonController>().disabled = true;
+        transform.position = room.GetComponent<Transform>().position;
+        playerGameObject.GetComponent<FirstPersonController>().disabled = false;
+        
+        
+    }
     
+    IEnumerator ResetTeleportFlag()
+    {
+        yield return new WaitForSeconds(0.1f);
+        isTeleporting = false;
+    }
 }
+
+
+
+
