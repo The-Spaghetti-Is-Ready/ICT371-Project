@@ -786,6 +786,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1165181810}
+  - component: {fileID: 1165181811}
   m_Layer: 0
   m_Name: CharacterDialog
   m_TagString: Untagged
@@ -809,6 +810,70 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1165181811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165181809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8782805032e946478597511e6f4d517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueParent: {fileID: 7794374862961915952}
+  dialogueText: {fileID: 5246747201727867992}
+  option1Button: {fileID: 980747785033033225}
+  option2Button: {fileID: 980747786085487407}
+  option3Button: {fileID: 275878781}
+  typingSpeed: 0.05
+  dialogueList:
+  - text: Hello there! How are you?
+    isEnd: 0
+    isQuestion: 1
+    answerOption1: Yes
+    answerOption2: No
+    answerOption3: Meh
+    option1IndexJump: 1
+    option2IndexJump: 2
+    option3IndexJump: 1
+    startDialogueEvent:
+      m_PersistentCalls:
+        m_Calls: []
+    endDialogueEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: Thats good.
+    isEnd: 1
+    isQuestion: 0
+    answerOption1: 
+    answerOption2: 
+    answerOption3: 
+    option1IndexJump: 0
+    option2IndexJump: 0
+    option3IndexJump: 0
+    startDialogueEvent:
+      m_PersistentCalls:
+        m_Calls: []
+    endDialogueEvent:
+      m_PersistentCalls:
+        m_Calls: []
+  - text: Aw, so sad.
+    isEnd: 1
+    isQuestion: 0
+    answerOption1: 
+    answerOption2: 
+    answerOption3: 
+    option1IndexJump: 0
+    option2IndexJump: 0
+    option3IndexJump: 0
+    startDialogueEvent:
+      m_PersistentCalls:
+        m_Calls: []
+    endDialogueEvent:
+      m_PersistentCalls:
+        m_Calls: []
 --- !u!4 &1231488718 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6189354538098044173, guid: 2fd3e07afe5b461490fb8e314976b1b0, type: 3}
@@ -967,26 +1032,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 1404259242}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7010c7b481158184286bd707b5fde263, type: 3}
+  m_Script: {fileID: 11500000, guid: 25ed851291529c0429d737d5af74c479, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueStrings:
-  - text: Hello There
-    isEnd: 1
-    isQuestion: 0
-    answerOption1: 
-    answerOption2: 
-    answerOption3: 
-    option1IndexJump: 0
-    option2IndexJump: 0
-    option3IndexJump: 0
-    startDialogueEvent:
-      m_PersistentCalls:
-        m_Calls: []
-    endDialogueEvent:
-      m_PersistentCalls:
-        m_Calls: []
-  NPCTransform: {fileID: 0}
+  requiredTag: Player
+  onTriggerEnter:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1165181811}
+        m_TargetAssemblyTypeName: DialogueSystem, Assembly-CSharp
+        m_MethodName: ShowDialogWindow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1165181811}
+        m_TargetAssemblyTypeName: DialogueSystem, Assembly-CSharp
+        m_MethodName: StartDialog
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  onTriggerExit:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1165181811}
+        m_TargetAssemblyTypeName: DialogueSystem, Assembly-CSharp
+        m_MethodName: HideDialogWindow
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1773958645
 GameObject:
   m_ObjectHideFlags: 0
@@ -3406,8 +3497,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 151, y: 0}
+  m_SizeDelta: {x: 270, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5246747201727867995
 GameObject:
@@ -4221,7 +4312,6 @@ GameObject:
   - component: {fileID: 3346848183351250297}
   - component: {fileID: 3346848183351250300}
   - component: {fileID: 29304936125330122}
-  - component: {fileID: 8059801596587495375}
   m_Layer: 30
   m_Name: XR Origin
   m_TagString: Player
@@ -4229,26 +4319,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8059801596587495375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8059801596587495374}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72e67cb626d26634ebd403d7843ec8cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dialogueParent: {fileID: 7794374862961915952}
-  dialogueText: {fileID: 5246747201727867992}
-  option1Button: {fileID: 980747785033033225}
-  option2Button: {fileID: 980747786085487407}
-  option3Button: {fileID: 275878781}
-  typingSpeed: 0.05
-  turnSpeed: 2
-  firstPersonController: {fileID: 0}
 --- !u!114 &8437710639058920798
 MonoBehaviour:
   m_ObjectHideFlags: 0
