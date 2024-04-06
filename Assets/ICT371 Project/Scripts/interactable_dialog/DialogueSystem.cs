@@ -59,6 +59,8 @@ public class DialogueSystem : MonoBehaviour
 
         initialized = true;
 
+        DisableButtons();
+
         StartCoroutine(ProcessDialog());
     }
 
@@ -84,13 +86,11 @@ public class DialogueSystem : MonoBehaviour
             {
                 yield return StartCoroutine(TypeText(line.text));
 
-                option1Button.interactable = true;
-                option2Button.interactable = true;
-                option3Button.interactable = true;
-
                 option1Button.GetComponentInChildren<TMP_Text>().text = line.answerOption1;
                 option2Button.GetComponentInChildren<TMP_Text>().text = line.answerOption2;
                 option3Button.GetComponentInChildren<TMP_Text>().text = line.answerOption3;
+
+                EnableButtons();
 
                 option1Button.onClick.AddListener(() => HandleOptionSelected(line.option1IndexJump));
                 option2Button.onClick.AddListener(() => HandleOptionSelected(line.option2IndexJump));
@@ -113,13 +113,16 @@ public class DialogueSystem : MonoBehaviour
 
     private void DisableButtons()
     {
-        option1Button.interactable = false;
-        option2Button.interactable = false;
-        option3Button.interactable = false;
+        option1Button.gameObject.SetActive(false);
+        option2Button.gameObject.SetActive(false);
+        option3Button.gameObject.SetActive(false);
+    }
 
-        option1Button.GetComponentInChildren<TMP_Text>().text = "No Option";
-        option2Button.GetComponentInChildren<TMP_Text>().text = "No Option";
-        option3Button.GetComponentInChildren<TMP_Text>().text = "No Option";
+    private void EnableButtons()
+    {
+        option1Button.gameObject.SetActive(true);
+        option2Button.gameObject.SetActive(true);
+        option3Button.gameObject.SetActive(true);
     }
 
     private void HandleOptionSelected(int indexJump)
