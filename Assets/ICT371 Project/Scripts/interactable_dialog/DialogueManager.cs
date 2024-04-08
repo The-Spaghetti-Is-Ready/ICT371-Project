@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
+using StarterAssets;
+using UnityEngine.InputSystem;
 
 public class DialogueManager : MonoBehaviour
 {
@@ -19,23 +21,25 @@ public class DialogueManager : MonoBehaviour
     private List<dialogueString> dialogueList;
 
     [Header("Player")]
-    [SerializeField] private FPSController firstPersonController;
-    private Transform playerCamera;
+    // [SerializeField] private FPSController firstPersonController;
+    // private Transform playerCamera;
+
+    [SerializeField] private FirstPersonController firstPersonController;
+    [SerializeField] private Transform playerCamera;
 
     private int currentDialogueIndex = 0;
 
     private void Start()
     {
         dialogueParent.SetActive(false);
-        playerCamera = Camera.main.transform;
+        // playerCamera = Camera.main.transform;
     }
 
     public void DialogueStart(List<dialogueString> textToPrint, Transform NPC)
     {
         dialogueParent.SetActive(true);
 
-        if (firstPersonController)
-            firstPersonController.enabled = false;
+        firstPersonController.enabled = false;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
@@ -157,8 +161,7 @@ public class DialogueManager : MonoBehaviour
         dialogueText.text = "";
         dialogueParent.SetActive(false);
 
-        if (firstPersonController)
-            firstPersonController.enabled = true;
+        firstPersonController.enabled = true;
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
