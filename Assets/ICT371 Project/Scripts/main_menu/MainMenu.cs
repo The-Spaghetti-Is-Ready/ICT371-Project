@@ -8,9 +8,6 @@ public class MainMenu : MonoBehaviour
 {
     [SerializeField]
     private int _gameSceneIndex = 0;
-    
-    [SerializeField]
-    private ShowControls _showControls;
 
     public void playGame()
     {
@@ -24,17 +21,5 @@ public class MainMenu : MonoBehaviour
     #else
         Application.Quit();
     #endif
-    }
-
-    public void showControls()
-    {
-        if (_showControls != null)
-        {
-            _showControls.display();
-        }
-        else
-        {
-            Debug.LogWarning("ShowControls not set");
-        }
     }
 }
