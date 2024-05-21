@@ -5,7 +5,8 @@ using StarterAssets;
 public class Teleport : MonoBehaviour
 {
     [SerializeField] private GameObject playerGameObject;
-
+    
+    [Header("Bedroom")]
     [SerializeField] private GameObject bedroomTrigger;
     [SerializeField] private List<GameObject> bedroomTeleportAnchors;
 
@@ -52,7 +53,6 @@ public class Teleport : MonoBehaviour
         playerGameObject.GetComponent<FirstPersonController>().disabled = true;
         transform.position = room.GetComponent<Transform>().position;
         playerGameObject.GetComponent<FirstPersonController>().disabled = false;
-        
         
     }
     
