@@ -13,11 +13,7 @@ public class BookOpenClose : MonoBehaviour
     bool _isOpening = false;
     bool _isClosing = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public bool IsOpen { get { return _isOpen; } }
 
     public void ToggleOpenClose()
     {
@@ -28,6 +24,22 @@ public class BookOpenClose : MonoBehaviour
             StartCoroutine(CloseBook());
         else
             StartCoroutine(OpenBook());
+    }
+
+    public void StartOpen()
+    {
+        if (_isOpening || _isClosing || _isOpen)
+            return;
+
+        StartCoroutine(OpenBook());
+    }
+
+    public void StartClose()
+    {
+        if (_isOpening || _isClosing || !_isOpen)
+            return;
+
+        StartCoroutine(CloseBook());
     }
 
     IEnumerator OpenBook()

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(BookOpenClose))]
-public class BookOpenCloseEditor : Editor
+[CustomEditor(typeof(BookInterface))]
+public class BookInterfaceEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        BookOpenClose bookOpenClose = (BookOpenClose)target;
+        BookInterface bookInterface = (BookInterface)target;
 
         GUI.enabled = Application.isPlaying;
         if (GUILayout.Button("Toggle Open/Close"))
         {
-            bookOpenClose.ToggleOpenClose();
+            bookInterface.openClose.ToggleOpenClose();
         }
         GUI.enabled = true;
     }
