@@ -20,8 +20,7 @@ public class ProgressSystem : MonoBehaviour
             days.Insert(indx, dayInsert);
         }
     }
-
-    // Update is called once per frame
+    
     int getCurrentDay()
     {
         return 0;
