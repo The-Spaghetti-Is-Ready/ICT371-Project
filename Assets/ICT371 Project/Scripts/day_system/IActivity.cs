@@ -9,6 +9,7 @@ public interface IActivity
 {
     UnityEvent OnStart { get; }
     UnityEvent OnEnd { get; }
+    bool IsWon { get; }
     
     void StartActivity();
 
