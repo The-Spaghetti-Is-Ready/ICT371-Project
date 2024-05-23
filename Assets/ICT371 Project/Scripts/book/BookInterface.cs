@@ -10,8 +10,6 @@ public class BookInterface : MonoBehaviour
     [Header("Components")]
 
     [SerializeField]
-    public BookOpenClose openClose;
-    [SerializeField]
     TextMeshProUGUI _dayNumberText;
     [SerializeField]
     TextMeshProUGUI _entryText;
