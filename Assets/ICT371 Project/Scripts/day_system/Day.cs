@@ -6,18 +6,32 @@ using UnityEngine.Events;
 // Author: Marco Garzon Lara
 // Author: Lane O'Rafferty
 public class Day : MonoBehaviour
-{
-    public List<IActivity> activities;
+{   
     public UnityEvent onStart;
     public UnityEvent onEnd;
-
+    
+    [SerializeField]
+    List<MonoBehaviour> _activities;
+    List<IActivity> _activityList;
     IActivity _currentActivity;
+
+    void Awake()
+    {
+        _activityList = new List<IActivity>();
+        foreach (MonoBehaviour behaviour in _activities)
+        {
+            if (behaviour is IActivity activity)
+            {
+                _activityList.Add(activity);
+                activity.OnEnd.AddListener(AdvanceActivity);
+            }
+        }
+    }
 
     public void StartDay()
     {
         onStart.Invoke();
-        _currentActivity = activities[0];
-        _currentActivity.OnEnd.AddListener(AdvanceActivity);
+        _currentActivity = _activityList[0];
         _currentActivity.StartActivity();
     }
 
@@ -28,13 +42,12 @@ public class Day : MonoBehaviour
 
     void AdvanceActivity()
     {
-        int index = activities.IndexOf(_currentActivity);
+        int index = _activityList.IndexOf(_currentActivity);
 
-        if (index < activities.Count - 1)
+        if (index < _activityList.Count - 1)
         {
             _currentActivity.EndActivity();
-            _currentActivity = activities[index + 1];
-            _currentActivity.OnEnd.AddListener(AdvanceActivity);
+            _currentActivity = _activityList[index + 1];
             _currentActivity.StartActivity();
         }
         else
