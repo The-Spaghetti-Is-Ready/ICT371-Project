@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class Activity : MonoBehaviour
+// Author: Marco Garzon Lara
+// Author: Lane O'Rafferty 
+public abstract class Activity
 {
     public UnityEvent onStart;
     public UnityEvent onEnd;
     public UnityEvent onWin;
     public UnityEvent onLose;
 
-    public bool start()
-    {
-        return false;
-    }
+    public abstract bool StartActivity();
 
-    public void cancel()
-    {
-        
-    }
+    public abstract void EndActivity();
 }
