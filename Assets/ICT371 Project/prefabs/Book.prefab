@@ -93,7 +93,7 @@ GameObject:
   - component: {fileID: 7443369097997388036}
   - component: {fileID: 7443369097997388037}
   - component: {fileID: 7443369097997388038}
-  - component: {fileID: 8872782347134310247}
+  - component: {fileID: 851321357295754726}
   m_Layer: 0
   m_Name: Book
   m_TagString: Untagged
@@ -142,7 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952f419627f812348baa494c670a3c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openClose: {fileID: 7443369097997388037}
   _dayNumberText: {fileID: 7443369099944112990}
   _entryText: {fileID: 7443369098484538122}
   _task1Text: {fileID: 7443369099595378611}
@@ -159,7 +158,7 @@ MonoBehaviour:
   _task1Complete: 1
   _task2Complete: 1
   _task3Complete: 0
---- !u!65 &8872782347134310247
+--- !u!65 &851321357295754726
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -170,8 +169,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.7310617, y: 0.0763045, z: 0.50417936}
-  m_Center: {x: -0.0016600192, y: 0.037691798, z: -0.01106739}
+  m_Size: {x: 0.73196846, y: 0.076743536, z: 0.5024377}
+  m_Center: {x: -0.0005055666, y: 0.037918124, z: -0.009100385}
 --- !u!1 &7443369098061536754
 GameObject:
   m_ObjectHideFlags: 0
