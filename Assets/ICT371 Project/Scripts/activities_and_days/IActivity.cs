@@ -10,6 +10,7 @@ public interface IActivity
     UnityEvent OnStart { get; }
     UnityEvent OnEnd { get; }
     bool IsWon { get; }
+    string ActivityName { get; }
     
     void StartActivity();
 

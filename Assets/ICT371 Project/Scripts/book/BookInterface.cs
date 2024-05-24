@@ -26,7 +26,7 @@ public class BookInterface : MonoBehaviour
     [SerializeField]
     GameObject _task3Checkmark;
 
-    [Header("Field data")]
+    [Header("Initial Data")]
     [SerializeField]
     int _dayNumber;
     [SerializeField]
@@ -44,7 +44,7 @@ public class BookInterface : MonoBehaviour
     [SerializeField]
     bool _task3Complete;
 
-    void Start()
+    void Awake()
     {
         _task1Checkmark.SetActive(false);
         _task2Checkmark.SetActive(false);
@@ -52,12 +52,12 @@ public class BookInterface : MonoBehaviour
 
         SetDayNumber(_dayNumber);
         SetEntryText(_entryTextData);
-        SetTask1Text(_task1TextData);
-        SetTask2Text(_task2TextData);
-        SetTask3Text(_task3TextData);
-        SetTask1Checkmark(_task1Complete);
-        SetTask2Checkmark(_task2Complete);
-        SetTask3Checkmark(_task3Complete);
+        SetTaskText(1, _task1TextData);
+        SetTaskText(2, _task2TextData);
+        SetTaskText(3, _task3TextData);
+        SetTaskCheckmark(1, _task1Complete);
+        SetTaskCheckmark(2, _task2Complete);
+        SetTaskCheckmark(3, _task3Complete);
     }
 
     public void SetDayNumber(int dayNumber)
@@ -70,33 +70,41 @@ public class BookInterface : MonoBehaviour
         _entryText.text = entryText;
     }
 
-    public void SetTask1Text(string task1Text)
+    public void SetTaskText(int taskNumber, string taskText)
     {
-        _task1Text.text = task1Text;
+        switch (taskNumber)
+        {
+            case 1:
+                _task1Text.text = taskText;
+                break;
+            case 2:
+                _task2Text.text = taskText;
+                break;
+            case 3:
+                _task3Text.text = taskText;
+                break;
+            default:
+                Debug.LogError("Task number must be between 1 and 3.");
+                break;
+        }
     }
 
-    public void SetTask2Text(string task2Text)
+    public void SetTaskCheckmark(int taskNumber, bool isComplete)
     {
-        _task2Text.text = task2Text;
-    }
-
-    public void SetTask3Text(string task3Text)
-    {
-        _task3Text.text = task3Text;
-    }
-
-    public void SetTask1Checkmark(bool isComplete)
-    {
-        _task1Checkmark.SetActive(isComplete);
-    }
-
-    public void SetTask2Checkmark(bool isComplete)
-    {
-        _task2Checkmark.SetActive(isComplete);
-    }
-
-    public void SetTask3Checkmark(bool isComplete)
-    {
-        _task3Checkmark.SetActive(isComplete);
+        switch (taskNumber)
+        {
+            case 1:
+                _task1Checkmark.SetActive(isComplete);
+                break;
+            case 2:
+                _task2Checkmark.SetActive(isComplete);
+                break;
+            case 3:
+                _task3Checkmark.SetActive(isComplete);
+                break;
+            default:
+                Debug.LogError("Task number must be between 1 and 3.");
+                break;
+        }
     }
 }

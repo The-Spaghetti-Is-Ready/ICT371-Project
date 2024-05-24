@@ -11,6 +11,8 @@ public class SeekAndActivate : MonoBehaviour, IActivity
 
     public bool IsWon { get => _isWon; }
 
+    public string ActivityName { get => _activityName; }
+
     public int RemainingTime { get => _remainingTime; }
 
     [SerializeField]
@@ -21,6 +23,8 @@ public class SeekAndActivate : MonoBehaviour, IActivity
     int _timeLimitSeconds = 60;
     [SerializeField]
     ActivationTarget _target;
+    [SerializeField]
+    string _activityName = "Seek and Activate";
 
     int _remainingTime;
     bool _isWon = false;
