@@ -1,5 +1,4 @@
 * text=auto
-
 # Unity insists using LF for its text assets so prevent changing them to CRLF
 *.unity text eol=lf
 *.prefab text eol=lf
@@ -10,3 +9,4 @@
 *.mesh text eol=lf
 *.txt text eol=lf
 LightingData.asset -text
+*.untiy filter=lfs diff=lfs merge=lfs -text
