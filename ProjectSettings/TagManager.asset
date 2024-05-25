@@ -9,6 +9,8 @@ TagManager:
   - Destroyer
   - MiniWorldCamera
   - Water
+  - Selectable
+  - selectable2
   - CinemachineTarget
   - Teleport
   layers:
