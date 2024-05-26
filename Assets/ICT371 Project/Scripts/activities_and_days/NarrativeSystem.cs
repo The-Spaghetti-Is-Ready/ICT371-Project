@@ -19,7 +19,7 @@ public class NarrativeSystem : MonoBehaviour
 
     [SerializeField] BookInterface _bookInterface;
 
-    int _currentDay = 0;
+    int _currentDayIndex = 0;
 
     // Cognitive decay modifiers
     private const double k_MinDecay = 0.0d, k_MaxDecay = 1.0d;
@@ -43,26 +43,36 @@ public class NarrativeSystem : MonoBehaviour
 
     void StartDay()
     {
-        // get activities for current day
-        var activities = _days[_currentDay].ActivityList;
-
-        // update books 'tasks' with activity names
-        for (int i = 0; i < activities.Count && i < 3; i++)
+        // bounds check
+        if (_currentDayIndex >= _days.Count)
         {
+            return;
+        }
+
+        // get activities for current day
+        var activities = _days[_currentDayIndex].ActivityList;
+
+        // setup book callbacks
+        for (int i = 0; (i < activities.Count) && (i < 3); i++)
+        {
+            // update books 'tasks' with activity names
             _bookInterface.SetTaskText(i + 1, activities[i].ActivityName);
+
+            // store current index for callback
+            int currentIndex = i;
+
+            // bind activity completion to book interface
+            activities[i].OnEnd.AddListener(() =>
+            {
+                _bookInterface.SetTaskCompletion(currentIndex + 1, activities[currentIndex].IsWon);
+            });
         }
 
         // reset task completion status
         _bookInterface.ResetTasks();
 
-        // bind activity completion to book interface
-        for (int i = 0; i < activities.Count && i < 3; i++)
-        {
-            activities[i].OnEnd.AddListener(() => { _bookInterface.SetTaskCompletion(i + 1, activities[i].IsWon); });
-        }
-
         // start the current day and increment the day counter
-        _days[_currentDay++].StartDay();
+        _days[_currentDayIndex++].StartDay();
     }
 
     public void EndDay()
@@ -70,7 +80,7 @@ public class NarrativeSystem : MonoBehaviour
         EvaluateDecay();
         EvaluateStage();
 
-        _days[_currentDay].EndDay();
+        _days[_currentDayIndex].EndDay();
     }
 
     public double GetCognitiveDecay()
@@ -87,8 +97,8 @@ public class NarrativeSystem : MonoBehaviour
     {
         // TODO: Add modifiers into decay rate
         // Evaluate the (daily) cognitive decay s.t. f(x) = c exp(kx)
-        _decay = k_MaxDecay * Math.Exp(_decayRate * _currentDay);
-        Debug.Log("Decay: " + _decay + ", Day: " + _currentDay);
+        _decay = k_MaxDecay * Math.Exp(_decayRate * _currentDayIndex);
+        Debug.Log("Decay: " + _decay + ", Day: " + _currentDayIndex);
     }
 
     private void EvaluateStage()
