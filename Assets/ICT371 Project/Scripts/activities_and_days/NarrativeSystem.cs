@@ -23,6 +23,8 @@ public class NarrativeSystem : MonoBehaviour
         Deceased
     }
 
+    private static NarrativeSystem _instance;
+
     // Narrative properties
     // -----------------------------------------------------------------
     int _currentDayIndex = 0;
@@ -38,9 +40,39 @@ public class NarrativeSystem : MonoBehaviour
 
     void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+
         foreach (Day day in _days)
         {
             day.OnDayEnd.AddListener(EndDay);
+        }
+    }
+
+    public static NarrativeSystem Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<NarrativeSystem>();
+
+                if (_instance == null)
+                {
+                    GameObject singleton = new GameObject(typeof(NarrativeSystem).Name);
+                    _instance = singleton.AddComponent<NarrativeSystem>();
+                    DontDestroyOnLoad(singleton);
+                }
+            }
+
+            return _instance;
         }
     }
 
