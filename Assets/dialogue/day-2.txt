@@ -1,0 +1,5 @@
+Good morning, that is day one of your activity regiment complete!
+How do you feel currently? | Good | Indifferent | Bad
+Are you experiencing any diffculties with your vision, hearing, or spatial awareness? Yes | No
+I see. Please be sure to continue monitoring any changes you notice to your perception.
+Please proceed with today's activities as usual, and make a note if you're having difficulties with vision, audio and/or spatial awareness.

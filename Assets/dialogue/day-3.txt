@@ -1,0 +1,5 @@
+Good morning! How are you feeling today? Good | Indifferent | Bad
+Have you had any difficulty getting around? Yes | No
+I see. As per usual, please continue doing your tasks for the day.
+How are you feeling? Good | You've already asked this question.
+Good. Everything seems to be in order. Please continue with your tasks as per usual.
