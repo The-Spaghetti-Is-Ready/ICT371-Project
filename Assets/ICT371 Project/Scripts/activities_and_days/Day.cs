@@ -39,6 +39,11 @@ public class Day : MonoBehaviour
         _currentActivity.StartActivity();
     }
 
+    public void EndDay()
+    {
+        onEnd.Invoke();
+    }
+
     public void EndCurrentActivity()
     {
         _currentActivity.EndActivity();
