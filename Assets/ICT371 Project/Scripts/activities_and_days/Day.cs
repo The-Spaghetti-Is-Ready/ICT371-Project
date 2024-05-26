@@ -5,19 +5,16 @@ using UnityEngine.Events;
 
 // Author: Marco Garzon Lara
 // Author: Lane O'Rafferty
+[System.Serializable]
 public class Day : MonoBehaviour
 {   
-    public UnityEvent onStart;
-    public UnityEvent onEnd;
+    public UnityEvent OnDayEnd;
 
-    public IActivity CurrentActivity { get => _currentActivity; }
-
-    public List<IActivity> ActivityList { get => _activityList; }
-    
     [SerializeField]
     List<MonoBehaviour> _activities;
     List<IActivity> _activityList;
-    IActivity _currentActivity;
+    int _currentActivityIndex = 0;
+    int _activitesCompleted = 0;
 
     void Awake()
     {
@@ -34,34 +31,41 @@ public class Day : MonoBehaviour
 
     public void StartDay()
     {
-        onStart.Invoke();
-        _currentActivity = _activityList[0];
-        _currentActivity.StartActivity();
+        _activityList[_currentActivityIndex].StartActivity();
     }
 
     public void EndDay()
     {
-        onEnd.Invoke();
+        ActivityList.ForEach(activity => activity.EndActivity());
     }
 
     public void EndCurrentActivity()
     {
-        _currentActivity.EndActivity();
+        _activityList[_currentActivityIndex].EndActivity();
     }
+
+    public bool IsDayComplete()
+    {
+        return _currentActivityIndex >= _activityList.Count;
+    }
+    public IActivity CurrentActivity { get => _activityList[_currentActivityIndex]; }
+
+    public List<IActivity> ActivityList { get => _activityList; }
+
+    public int ActivitiesCompleted { get => _activitesCompleted; }
 
     void AdvanceActivity()
     {
-        int index = _activityList.IndexOf(_currentActivity);
+        _activityList[_currentActivityIndex++].EndActivity();
+        _activitesCompleted++;    
 
-        if (index < _activityList.Count - 1)
+        if (_currentActivityIndex < _activityList.Count)
         {
-            _currentActivity.EndActivity();
-            _currentActivity = _activityList[index + 1];
-            _currentActivity.StartActivity();
+            _activityList[_currentActivityIndex].StartActivity();
         }
         else
         {
-            onEnd.Invoke();
+            OnDayEnd.Invoke();
         }
     }
 }
