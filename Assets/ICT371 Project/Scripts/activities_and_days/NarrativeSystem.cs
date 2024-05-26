@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ExceptionServices;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.Events;
@@ -92,19 +93,24 @@ public class NarrativeSystem : MonoBehaviour
         // get activities for current day
         var activities = _days[_currentDayIndex].ActivityList;
 
-        // setup book callbacks
-        for (int i = 0; (i < activities.Count) && (i < 3); i++)
+        foreach (IActivity activity in activities)
         {
-            // update books 'tasks' with activity names
-            _bookInterface.SetTaskText(i + 1, activities[i].ActivityName);
-
+            // book can only handle 3 tasks for now
+            if (activities.IndexOf(activity) >= 3)
+            {
+                break;
+            }
+            
             // store current index for callback
-            int currentIndex = i;
+            int currentIndex = activities.IndexOf(activity);
+
+            // update books 'tasks' with activity names
+            _bookInterface.SetTaskText(currentIndex + 1, activity.ActivityName);
 
             // bind activity completion to book interface
-            activities[i].OnEnd.AddListener(() =>
+            activity.OnEnd.AddListener(() =>
             {
-                _bookInterface.SetTaskCompletion(currentIndex + 1, activities[currentIndex].IsWon);
+                _bookInterface.SetTaskCompletion(currentIndex + 1, activity.IsWon);
             });
         }
 
@@ -145,6 +151,10 @@ public class NarrativeSystem : MonoBehaviour
     {
         return _stage;
     }
+
+    public Day CurrentDay => _days[_currentDayIndex];
+
+    public int CurrentDayNum => _currentDayIndex + 1;
 
     private void EvaluateDecay()
     {

@@ -13,7 +13,6 @@ public class Day : MonoBehaviour
     [SerializeField]
     List<MonoBehaviour> _activities;
     List<IActivity> _activityList;
-    int _currentActivityIndex = 0;
     int _activitesCompleted = 0;
 
     void Awake()
@@ -24,46 +23,33 @@ public class Day : MonoBehaviour
             if (behaviour is IActivity activity)
             {
                 _activityList.Add(activity);
-                activity.OnEnd.AddListener(AdvanceActivity);
+                activity.OnEnd.AddListener(OnActivityComplete);
             }
         }
     }
 
     public void StartDay()
     {
-        _activityList[_currentActivityIndex].StartActivity();
+         _activityList.ForEach(activity => activity.StartActivity());
     }
 
     public void EndDay()
     {
-        ActivityList.ForEach(activity => activity.EndActivity());
+        _activityList.ForEach(activity => activity.EndActivity());
     }
-
-    public void EndCurrentActivity()
-    {
-        _activityList[_currentActivityIndex].EndActivity();
-    }
-
-    public bool IsDayComplete()
-    {
-        return _currentActivityIndex >= _activityList.Count;
-    }
-    public IActivity CurrentActivity { get => _activityList[_currentActivityIndex]; }
 
     public List<IActivity> ActivityList { get => _activityList; }
 
     public int ActivitiesCompleted { get => _activitesCompleted; }
 
-    void AdvanceActivity()
+    void OnActivityComplete()
     {
-        _activityList[_currentActivityIndex++].EndActivity();
-        _activitesCompleted++;    
-
-        if (_currentActivityIndex < _activityList.Count)
+        if (_activitesCompleted < _activityList.Count)
         {
-            _activityList[_currentActivityIndex].StartActivity();
+            _activitesCompleted++;
         }
-        else
+
+        if (_activitesCompleted == _activityList.Count)
         {
             OnDayEnd.Invoke();
         }
