@@ -20,7 +20,6 @@ public class NarrativeSystem : MonoBehaviour
     int _currentDayIndex = 0;
     // -----------------------------------------------------------------
 
-
     void Awake()
     {
         foreach (Day day in _days)
@@ -72,6 +71,27 @@ public class NarrativeSystem : MonoBehaviour
 
         // invoke the day start event for the narrative
         _onDayStart.Invoke();
+
+        // update the book day number
+        _bookInterface.SetDayNumber(_currentDayIndex + 1);
+
+        // invoke the day start event for the narrative
+        _onDayStart.Invoke();
+    }
+
+    public void EndDay()
+    {
+        if (_currentDayIndex >= _days.Count)
+        {
+            return;
+        }
+
+        _days[_currentDayIndex++].EndDay();
+        
+        _playerInterface.EvaluateDecay();
+        _playerInterface.EvaluateStage();
+
+        _onDayEnd.Invoke();
     }
 
     public void EndDay()
