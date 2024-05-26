@@ -5,8 +5,6 @@ using UnityEngine;
 public class AdvanceDayButton : MonoBehaviour
 {
     [SerializeField]
-    NarrativeSystem _narrativeSystem;
-    [SerializeField]
     Material _readyMaterial;
     [SerializeField]
     Material _notReadyMaterial;
@@ -25,7 +23,7 @@ public class AdvanceDayButton : MonoBehaviour
             return;
         }
 
-        _narrativeSystem.StartDay();
+        NarrativeSystem.Instance.StartDay();
         SetReady(false);
     }
 

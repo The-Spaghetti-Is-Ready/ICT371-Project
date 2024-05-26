@@ -15,6 +15,8 @@ public class NarrativeSystem : MonoBehaviour
 
     [SerializeField] PlayerStatus _playerInterface;
 
+    private static NarrativeSystem _instance;
+
     // Narrative properties
     // -----------------------------------------------------------------
     int _currentDayIndex = 0;
@@ -22,9 +24,39 @@ public class NarrativeSystem : MonoBehaviour
 
     void Awake()
     {
+        if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else if (_instance != this)
+        {
+            Destroy(gameObject);
+        }
+
         foreach (Day day in _days)
         {
             day.OnDayEnd.AddListener(EndDay);
+        }
+    }
+
+    public static NarrativeSystem Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindObjectOfType<NarrativeSystem>();
+
+                if (_instance == null)
+                {
+                    GameObject singleton = new GameObject(typeof(NarrativeSystem).Name);
+                    _instance = singleton.AddComponent<NarrativeSystem>();
+                    DontDestroyOnLoad(singleton);
+                }
+            }
+
+            return _instance;
         }
     }
 
@@ -44,19 +76,24 @@ public class NarrativeSystem : MonoBehaviour
         // get activities for current day
         var activities = _days[_currentDayIndex].ActivityList;
 
-        // setup book callbacks
-        for (int i = 0; (i < activities.Count) && (i < 3); i++)
+        foreach (IActivity activity in activities)
         {
-            // update books 'tasks' with activity names
-            _bookInterface.SetTaskText(i + 1, activities[i].ActivityName);
-
+            // book can only handle 3 tasks for now
+            if (activities.IndexOf(activity) >= 3)
+            {
+                break;
+            }
+            
             // store current index for callback
-            int currentIndex = i;
+            int currentIndex = activities.IndexOf(activity);
+
+            // update books 'tasks' with activity names
+            _bookInterface.SetTaskText(currentIndex + 1, activity.ActivityName);
 
             // bind activity completion to book interface
-            activities[i].OnEnd.AddListener(() =>
+            activity.OnEnd.AddListener(() =>
             {
-                _bookInterface.SetTaskCompletion(currentIndex + 1, activities[currentIndex].IsWon);
+                _bookInterface.SetTaskCompletion(currentIndex + 1, activity.IsWon);
             });
         }
 
