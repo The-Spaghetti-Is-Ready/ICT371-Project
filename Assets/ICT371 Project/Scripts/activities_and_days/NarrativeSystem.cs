@@ -88,21 +88,6 @@ public class NarrativeSystem : MonoBehaviour
 
         _days[_currentDayIndex++].EndDay();
         
-        _playerInterface.EvaluateDecay();
-        _playerInterface.EvaluateStage();
-
-        _onDayEnd.Invoke();
-    }
-
-    public void EndDay()
-    {
-        if (_currentDayIndex >= _days.Count)
-        {
-            return;
-        }
-
-        _days[_currentDayIndex++].EndDay();
-        
         _playerInterface.EvaluateDecay(_currentDayIndex);
         _playerInterface.EvaluateStage();
 
