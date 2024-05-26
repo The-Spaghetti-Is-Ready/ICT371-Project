@@ -17,6 +17,11 @@ public class MemoryGame : MonoBehaviour, IActivity
         onEnd.Invoke();
     }
 
+    public int GetMoves()
+    {
+        return _moves;
+    }
+
     public bool IsWon
     {
         get => isWon;
