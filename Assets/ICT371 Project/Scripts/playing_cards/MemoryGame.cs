@@ -1,33 +1,38 @@
 using UnityEngine;
+using UnityEngine.Events;
 using Random = System.Random;
 
-public class MemoryGame : MonoBehaviour
+public class MemoryGame : MonoBehaviour, IActivity
 {
     public static MemoryGame Instance;
-    private static readonly string[] Suits = { "Club", "Diamond", "Heart", "Spade" };
 
-    private static readonly string[] Ranks =
-        { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13" };
-
-    private PlayingCard[] _deck;
-    private PlayingCard _selectionOne;
-    private PlayingCard _selectionTwo;
-    private double _timer;
-
-    private void Start()
+    public string ActivityName
     {
-        Instance = this;
-        _deck = transform.GetComponentsInChildren<PlayingCard>();
-
-        Shuffle();
-        Deal();
+        get => activityName;
+        set => activityName = value;
     }
 
-    private void Update()
+    public void EndActivity()
     {
-        if (_selectionTwo)
-            if (Time.time > _timer + 2.0)
-                CheckMatch();
+        onEnd.Invoke();
+    }
+
+    public bool IsWon
+    {
+        get => isWon;
+        set => isWon = value;
+    }
+
+    public UnityEvent OnEnd
+    {
+        get => onEnd;
+        set => onEnd = value;
+    }
+
+    public UnityEvent OnStart
+    {
+        get => onStart;
+        set => onStart = value;
     }
 
     public void Select(PlayingCard card)
@@ -43,8 +48,19 @@ public class MemoryGame : MonoBehaviour
             {
                 _selectionTwo = card;
                 _timer = Time.time;
+                _moves++;
             }
         }
+    }
+
+    public void StartActivity()
+    {
+        onStart.Invoke();
+    }
+
+    private static T GetRandomElement<T>(T[] array)
+    {
+        return array[(int)Mathf.Floor(UnityEngine.Random.value * array.Length)];
     }
 
     private void CheckMatch()
@@ -53,6 +69,7 @@ public class MemoryGame : MonoBehaviour
         {
             _selectionOne.Hide();
             _selectionTwo.Hide();
+            _matches++;
         }
         else
         {
@@ -63,13 +80,12 @@ public class MemoryGame : MonoBehaviour
         _selectionOne = _selectionTwo = null;
     }
 
-    private void Shuffle()
+    private void CheckWon()
     {
-        var rnd = new Random();
-        for (var i = _deck.Length - 1; i > 0; --i)
+        if (_matches == _deck.Length / 2)
         {
-            var n = rnd.Next(i + 1);
-            (_deck[i], _deck[n]) = (_deck[n], _deck[i]);
+            isWon = true;
+            Debug.Log("Game Won: " + activityName);
         }
     }
 
@@ -86,8 +102,50 @@ public class MemoryGame : MonoBehaviour
         }
     }
 
-    private static T GetRandomElement<T>(T[] array)
+    private void Shuffle()
     {
-        return array[(int)Mathf.Floor(UnityEngine.Random.value * array.Length)];
+        var rnd = new Random();
+        for (var i = _deck.Length - 1; i > 0; --i)
+        {
+            var n = rnd.Next(i + 1);
+            (_deck[i], _deck[n]) = (_deck[n], _deck[i]);
+        }
     }
+
+    private void Start()
+    {
+        Instance = this;
+        _deck = transform.GetComponentsInChildren<PlayingCard>();
+        Debug.Log("Deck Length: " + _deck.Length);
+
+        Shuffle();
+        Deal();
+    }
+
+    private void Update()
+    {
+        Debug.Log("Moves: " + _moves + ", Matches: " + _matches);
+        CheckWon();
+
+        if (_selectionTwo)
+            if (Time.time > _timer + 2.0)
+                CheckMatch();
+    }
+
+    private static readonly string[] Suits = { "Club", "Diamond", "Heart", "Spade" };
+
+    private static readonly string[] Ranks =
+        { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13" };
+
+    [SerializeField] private string activityName = "Memory Game";
+    [SerializeField] private bool isWon;
+    [SerializeField] private UnityEvent onEnd;
+    [SerializeField] private UnityEvent onStart;
+
+    private PlayingCard[] _deck;
+    private int _matches;
+    private int _moves;
+    private PlayingCard _selectionOne;
+    private PlayingCard _selectionTwo;
+    private double _timer;
 }
