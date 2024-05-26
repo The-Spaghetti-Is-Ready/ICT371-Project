@@ -12,7 +12,7 @@ public class NarrativeSystem : MonoBehaviour
     [SerializeField]
     BookInterface _bookInterface;
 
-    int _currentDay = 0;
+    int _currentDayIndex = 0;
 
     void Start()
     {
@@ -30,28 +30,36 @@ public class NarrativeSystem : MonoBehaviour
 
     void StartDay()
     {
-        // get activities for current day
-        var activities = _days[_currentDay].ActivityList;
-
-        // update books 'tasks' with activity names
-        for (int i = 0; i < activities.Count && i < 3; i++)
+        // bounds check
+        if (_currentDayIndex >= _days.Count)
         {
+            return;
+        }
+
+        // get activities for current day
+        var activities = _days[_currentDayIndex].ActivityList;
+
+        // setup book callbacks
+        for (int i = 0; (i < activities.Count) && (i < 3); i++)
+        {
+            
+            // update books 'tasks' with activity names
             _bookInterface.SetTaskText(i + 1, activities[i].ActivityName);
+
+            // store current index for callback
+            int currentIndex = i;
+
+            // bind activity completion to book interface
+            activities[i].OnEnd.AddListener(() =>
+            {
+                _bookInterface.SetTaskCompletion(currentIndex + 1, activities[currentIndex].IsWon);
+            });
         }
 
         // reset task completion status
         _bookInterface.ResetTasks();
 
-        // bind activity completion to book interface
-        for (int i = 0; i < activities.Count && i < 3; i++)
-        {
-            activities[i].OnEnd.AddListener(() =>
-            {
-                _bookInterface.SetTaskCompletion(i + 1, activities[i].IsWon);
-            });
-        }
-
         // start the current day and increment the day counter
-        _days[_currentDay++].StartDay();
+        _days[_currentDayIndex++].StartDay();
     }
 }
