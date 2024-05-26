@@ -15,10 +15,13 @@ public class TeleportVariant : MonoBehaviour
     private Vector3 positionDelta;
     
     [SerializeField][Range(0.0f, 1.0f)] 
-    private float teleportChance = 0.5f; // this will change depending on the sanity
+    
+    private float teleportChance = 1.0f; // this will change depending on the sanity
 
     [SerializeField] 
     private List<Transform> teleportAnchors = new List<Transform>();
+
+    [SerializeField] private PlayerStatus playerState;
 
     [SerializeField] private float teleportCooldown;
     private bool isTeleporting = false;
@@ -30,7 +33,7 @@ public class TeleportVariant : MonoBehaviour
 
     public void MovePlayer()
     {
-        if (teleportChance < Random.Range(0.0f, 1.0f))
+        if ((playerState.GetCognitiveDecay() * teleportChance) < Random.Range(0.0f, 1.0f))
             return;
 
         if (!isTeleporting)

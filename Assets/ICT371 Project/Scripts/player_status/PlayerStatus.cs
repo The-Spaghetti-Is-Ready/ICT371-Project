@@ -3,17 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public enum CognitiveStage
-{
-    Early,
-    Middle,
-    Late,
-    Deceased
-};
-
 public class PlayerStatus : MonoBehaviour
 {
+    public enum CognitiveStage
+    {
+        Early,
+        Middle,
+        Late,
+        Deceased
+    };
     private const double k_MinDecay = 0.0d, k_MaxDecay = 1.0d;
     private double _decay = 0.0d;
     private double _decayRate = -0.8d;
