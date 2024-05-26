@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
@@ -6,13 +7,25 @@ using UnityEngine.iOS;
 
 public class NarrativeSystem : MonoBehaviour
 {
-    [SerializeField]
-    List<Day> _days;
+    public enum CognitiveStage
+    {
+        Early,
+        Middle,
+        Late,
+        Deceased
+    }
 
-    [SerializeField]
-    BookInterface _bookInterface;
+    [SerializeField] List<Day> _days;
+
+    [SerializeField] BookInterface _bookInterface;
 
     int _currentDayIndex = 0;
+
+    // Cognitive decay modifiers
+    private const double k_MinDecay = 0.0d, k_MaxDecay = 1.0d;
+    private double _decay = 0.0d;
+    private double _decayRate = -0.8d;
+    private CognitiveStage _stage = CognitiveStage.Early;
 
     void Start()
     {
@@ -42,7 +55,6 @@ public class NarrativeSystem : MonoBehaviour
         // setup book callbacks
         for (int i = 0; (i < activities.Count) && (i < 3); i++)
         {
-            
             // update books 'tasks' with activity names
             _bookInterface.SetTaskText(i + 1, activities[i].ActivityName);
 
@@ -61,5 +73,51 @@ public class NarrativeSystem : MonoBehaviour
 
         // start the current day and increment the day counter
         _days[_currentDayIndex++].StartDay();
+    }
+
+    public void EndDay()
+    {
+        EvaluateDecay();
+        EvaluateStage();
+
+        _days[_currentDayIndex].EndDay();
+    }
+
+    public double GetCognitiveDecay()
+    {
+        return _decay;
+    }
+
+    public CognitiveStage GetCognitiveStage()
+    {
+        return _stage;
+    }
+
+    private void EvaluateDecay()
+    {
+        // TODO: Add modifiers into decay rate
+        // Evaluate the (daily) cognitive decay s.t. f(x) = c exp(kx)
+        _decay = k_MaxDecay * Math.Exp(_decayRate * _currentDayIndex);
+        Debug.Log("Decay: " + _decay + ", Day: " + _currentDayIndex);
+    }
+
+    private void EvaluateStage()
+    {
+        if (_decay > 0.3d)
+        {
+            _stage = CognitiveStage.Middle;
+        }
+
+        if (_decay > 0.6d)
+        {
+            _stage = CognitiveStage.Late;
+        }
+
+        if (_decay > k_MaxDecay)
+        {
+            _stage = CognitiveStage.Deceased;
+        }
+
+        Debug.Log("Stage: " + _stage);
     }
 }
