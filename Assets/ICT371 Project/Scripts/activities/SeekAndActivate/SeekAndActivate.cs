@@ -22,8 +22,6 @@ public class SeekAndActivate : MonoBehaviour, IActivity
     [SerializeField]
     int _timeLimitSeconds = 60;
     [SerializeField]
-    ActivationTarget _target;
-    [SerializeField]
     string _activityName = "Seek and Activate";
 
     int _remainingTime;
@@ -31,6 +29,11 @@ public class SeekAndActivate : MonoBehaviour, IActivity
 
     public void EndActivity()
     {
+        if (_remainingTime > 0)
+        {
+            _isWon = true;
+        }
+
         _onEnd.Invoke();
     }
 
@@ -51,12 +54,6 @@ public class SeekAndActivate : MonoBehaviour, IActivity
         {
             yield return new WaitForSeconds(1);
             
-            if (_target.IsActivated)
-            {
-                _isWon = true;
-                break;
-            }
-
             _remainingTime--;
         }
 

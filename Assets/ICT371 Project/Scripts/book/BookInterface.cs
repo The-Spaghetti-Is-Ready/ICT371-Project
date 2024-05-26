@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UIElements;
 
 public class BookInterface : MonoBehaviour
 {
     [Header("Components")]
-
     [SerializeField]
     TextMeshProUGUI _dayNumberText;
     [SerializeField]
@@ -20,11 +20,17 @@ public class BookInterface : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI _task3Text;
     [SerializeField]
-    GameObject _task1Checkmark;
+    RawImage _task1Checkmark;
     [SerializeField]
-    GameObject _task2Checkmark;
+    RawImage _task2Checkmark;
     [SerializeField]
-    GameObject _task3Checkmark;
+    RawImage _task3Checkmark;
+
+    [Header("Images")]
+    [SerializeField]
+    Texture _tickImage;
+    [SerializeField]
+    Texture _crossImage;
 
     [Header("Initial Data")]
     [SerializeField]
@@ -37,27 +43,14 @@ public class BookInterface : MonoBehaviour
     string _task2TextData;
     [SerializeField]
     string _task3TextData;
-    [SerializeField]
-    bool _task1Complete;
-    [SerializeField]
-    bool _task2Complete;
-    [SerializeField]
-    bool _task3Complete;
 
     void Awake()
     {
-        _task1Checkmark.SetActive(false);
-        _task2Checkmark.SetActive(false);
-        _task3Checkmark.SetActive(false);
-
         SetDayNumber(_dayNumber);
         SetEntryText(_entryTextData);
         SetTaskText(1, _task1TextData);
         SetTaskText(2, _task2TextData);
         SetTaskText(3, _task3TextData);
-        SetTaskCheckmark(1, _task1Complete);
-        SetTaskCheckmark(2, _task2Complete);
-        SetTaskCheckmark(3, _task3Complete);
     }
 
     public void SetDayNumber(int dayNumber)
@@ -89,22 +82,32 @@ public class BookInterface : MonoBehaviour
         }
     }
 
-    public void SetTaskCheckmark(int taskNumber, bool isComplete)
+    public void SetTaskCompletion(int taskNumber, bool isWon)
     {
         switch (taskNumber)
         {
             case 1:
-                _task1Checkmark.SetActive(isComplete);
+                _task1Checkmark.gameObject.SetActive(true);
+                _task1Checkmark.texture = isWon ? _tickImage : _crossImage;
                 break;
             case 2:
-                _task2Checkmark.SetActive(isComplete);
+                _task2Checkmark.gameObject.SetActive(true);
+                _task2Checkmark.texture = isWon ? _tickImage : _crossImage;
                 break;
             case 3:
-                _task3Checkmark.SetActive(isComplete);
+                _task3Checkmark.gameObject.SetActive(true);
+                _task3Checkmark.texture = isWon ? _tickImage : _crossImage;
                 break;
             default:
                 Debug.LogError("Task number must be between 1 and 3.");
                 break;
         }
+    }
+
+    public void ResetTasks()
+    {
+        _task1Checkmark.gameObject.SetActive(false);
+        _task2Checkmark.gameObject.SetActive(false);
+        _task3Checkmark.gameObject.SetActive(false);
     }
 }
