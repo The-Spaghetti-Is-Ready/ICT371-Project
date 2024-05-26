@@ -11,7 +11,8 @@ public class Day : MonoBehaviour
     public UnityEvent onEnd;
 
     public IActivity CurrentActivity { get => _currentActivity; }
-    public List<string> ActivityNames { get => _activityList.ConvertAll(activity => activity.ActivityName); }
+
+    public List<IActivity> ActivityList { get => _activityList; }
     
     [SerializeField]
     List<MonoBehaviour> _activities;
