@@ -9,10 +9,10 @@ public class NarrativeSystem : MonoBehaviour
 {
     public enum CognitiveStage
     {
-        EARLY,
-        MIDDLE,
-        LATE,
-        DECEASED
+        Early,
+        Middle,
+        Late,
+        Deceased
     }
 
     [SerializeField] List<Day> _days;
@@ -25,7 +25,7 @@ public class NarrativeSystem : MonoBehaviour
     private const double k_MinDecay = 0.0d, k_MaxDecay = 1.0d;
     private double _decay = 0.0d;
     private double _decayRate = -0.8d;
-    private CognitiveStage _stage = CognitiveStage.EARLY;
+    private CognitiveStage _stage = CognitiveStage.Early;
 
     void Start()
     {
@@ -95,17 +95,17 @@ public class NarrativeSystem : MonoBehaviour
     {
         if (_decay > 0.3d)
         {
-            _stage = CognitiveStage.MIDDLE;
+            _stage = CognitiveStage.Middle;
         }
 
         if (_decay > 0.6d)
         {
-            _stage = CognitiveStage.LATE;
+            _stage = CognitiveStage.Late;
         }
 
         if (_decay > k_MaxDecay)
         {
-            _stage = CognitiveStage.DECEASED;
+            _stage = CognitiveStage.Deceased;
         }
 
         Debug.Log("Stage: " + _stage);
