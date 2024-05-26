@@ -67,24 +67,8 @@ public class NarrativeSystem : MonoBehaviour
 
     public void EndDay()
     {
-        // Evaluate the (daily) cognitive decay s.t. f(x) = c exp(kx)
-        // TODO: Add modifiers into decay rate
-        _decay = k_MaxDecay * Math.Exp(_decayRate * _currentDay);
-
-        if (_decay > 0.3d)
-        {
-            _stage = CognitiveStage.MIDDLE;
-        }
-
-        if (_decay > 0.6d)
-        {
-            _stage = CognitiveStage.LATE;
-        }
-
-        if (_decay == k_MaxDecay)
-        {
-            _stage = CognitiveStage.DECEASED;
-        }
+        EvaluateDecay();
+        EvaluateStage();
 
         _days[_currentDay].EndDay();
     }
@@ -97,5 +81,30 @@ public class NarrativeSystem : MonoBehaviour
     public CognitiveStage GetCognitiveStage()
     {
         return _stage;
+    }
+
+    private void EvaluateDecay()
+    {
+        // TODO: Add modifiers into decay rate
+        // Evaluate the (daily) cognitive decay s.t. f(x) = c exp(kx)
+        _decay = k_MaxDecay * Math.Exp(_decayRate * _currentDay);
+    }
+
+    private void EvaluateStage()
+    {
+        if (_decay > 0.3d)
+        {
+            _stage = CognitiveStage.MIDDLE;
+        }
+
+        if (_decay > 0.6d)
+        {
+            _stage = CognitiveStage.LATE;
+        }
+
+        if (_decay > k_MaxDecay)
+        {
+            _stage = CognitiveStage.DECEASED;
+        }
     }
 }
