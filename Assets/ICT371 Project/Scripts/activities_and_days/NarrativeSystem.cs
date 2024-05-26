@@ -15,28 +15,30 @@ public class NarrativeSystem : MonoBehaviour
 
     void Start()
     {
-        linkDaysToSystem();
+        LinkDaysToSystem();
+        StartDay();
+    }
 
-        processDay();
-        
-        var activities = days[0].ActivityList;
+    void LinkDaysToSystem()
+    {
+        foreach (var day in days)
+        {
+            day.onEnd.AddListener(StartDay);
+        }
+    }
 
+    void StartDay()
+    {
+        // get activities for current day
+        var activities = days[_currentDay].ActivityList;
+
+        // update books 'tasks' with activity names
         for (int i = 0; i < activities.Count; i++)
         {
             bookInterface.SetTaskText(i + 1, activities[i].ActivityName);
         }
-    }
 
-    void linkDaysToSystem()
-    {
-        foreach (var day in days)
-        {
-            day.onEnd.AddListener(processDay);
-        }
-    }
-
-    void processDay()
-    {
-        
+        // start the current day and increment the day counter
+        days[_currentDay++].StartDay();
     }
 }
