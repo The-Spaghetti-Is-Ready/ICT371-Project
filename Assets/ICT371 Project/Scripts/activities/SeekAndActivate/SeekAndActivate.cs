@@ -24,11 +24,20 @@ public class SeekAndActivate : MonoBehaviour, IActivity
     [SerializeField]
     string _activityName = "Seek and Activate";
 
-    int _remainingTime;
+    bool _isRunning = false;
     bool _isWon = false;
+    int _remainingTime;
+    Coroutine _timer;
 
     public void EndActivity()
     {
+        if (!_isRunning)
+            return;
+
+        _isRunning = false;
+
+        StopCoroutine(_timer);
+
         if (_remainingTime > 0)
         {
             _isWon = true;
@@ -39,8 +48,9 @@ public class SeekAndActivate : MonoBehaviour, IActivity
 
     public void StartActivity()
     {
+        _isRunning = true;
         _onStart.Invoke();
-        StartCoroutine(UpdateTimer());
+        _timer = StartCoroutine(UpdateTimer());
     }
 
     void Awake()
