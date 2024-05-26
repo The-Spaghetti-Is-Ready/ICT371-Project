@@ -20,10 +20,13 @@ public class AdvanceDayButton : MonoBehaviour
 
     public void AdvanceDay()
     {
-        if (_isReady)
+        if (!_isReady)
         {
-            _narrativeSystem.StartDay();
+            return;
         }
+
+        _narrativeSystem.StartDay();
+        SetReady(false);
     }
 
     public void SetReady(bool ready)
