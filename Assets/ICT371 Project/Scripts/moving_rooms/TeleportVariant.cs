@@ -16,6 +16,8 @@ public class TeleportVariant : MonoBehaviour
     [SerializeField][Range(0.0f, 1.0f)] 
     private float teleportChance = 0.5f;
 
+    [SerializeField] private List<Transform> teleportAnchors = new List<Transform>();
+
     void Start()
     {
         
