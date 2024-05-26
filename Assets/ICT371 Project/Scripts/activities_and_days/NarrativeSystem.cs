@@ -3,10 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.iOS;
 
 public class NarrativeSystem : MonoBehaviour
 {
+    [SerializeField]
+    UnityEvent _onDayStart;
+    [SerializeField]
+    UnityEvent _onDayEnd;
+    [SerializeField] BookInterface _bookInterface;
+    [SerializeField] List<Day> _days;
+    
     public enum CognitiveStage
     {
         Early,
@@ -15,33 +23,33 @@ public class NarrativeSystem : MonoBehaviour
         Deceased
     }
 
-    [SerializeField] List<Day> _days;
-
-    [SerializeField] BookInterface _bookInterface;
-
+    // Narrative properties
+    // -----------------------------------------------------------------
     int _currentDayIndex = 0;
+    // -----------------------------------------------------------------
 
     // Cognitive decay modifiers
+    // -----------------------------------------------------------------
     private const double k_MinDecay = 0.0d, k_MaxDecay = 1.0d;
     private double _decay = 0.0d;
     private double _decayRate = -0.8d;
     private CognitiveStage _stage = CognitiveStage.Early;
+    // -----------------------------------------------------------------
 
-    void Start()
+    void Awake()
     {
-        LinkDaysToSystem();
-        StartDay();
-    }
-
-    void LinkDaysToSystem()
-    {
-        foreach (var day in _days)
+        foreach (Day day in _days)
         {
-            day.onEnd.AddListener(StartDay);
+            day.OnDayEnd.AddListener(EndDay);
         }
     }
 
-    void StartDay()
+    void Start()
+    {
+        StartDay();
+    }
+
+    public void StartDay()
     {
         // bounds check
         if (_currentDayIndex >= _days.Count)
@@ -71,16 +79,29 @@ public class NarrativeSystem : MonoBehaviour
         // reset task completion status
         _bookInterface.ResetTasks();
 
-        // start the current day and increment the day counter
-        _days[_currentDayIndex++].StartDay();
+        // start the current day
+        _days[_currentDayIndex].StartDay();
+
+        // update the book day number
+        _bookInterface.SetDayNumber(_currentDayIndex + 1);
+
+        // invoke the day start event for the narrative
+        _onDayStart.Invoke();
     }
 
     public void EndDay()
     {
+        if (_currentDayIndex >= _days.Count)
+        {
+            return;
+        }
+
+        _days[_currentDayIndex++].EndDay();
+        
         EvaluateDecay();
         EvaluateStage();
 
-        _days[_currentDayIndex].EndDay();
+        _onDayEnd.Invoke();
     }
 
     public double GetCognitiveDecay()
