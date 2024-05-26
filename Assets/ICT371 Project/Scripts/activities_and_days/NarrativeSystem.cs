@@ -88,6 +88,7 @@ public class NarrativeSystem : MonoBehaviour
         // TODO: Add modifiers into decay rate
         // Evaluate the (daily) cognitive decay s.t. f(x) = c exp(kx)
         _decay = k_MaxDecay * Math.Exp(_decayRate * _currentDay);
+        Debug.Log("Decay: " + _decay + ", Day: " + _currentDay);
     }
 
     private void EvaluateStage()
@@ -106,5 +107,7 @@ public class NarrativeSystem : MonoBehaviour
         {
             _stage = CognitiveStage.DECEASED;
         }
+
+        Debug.Log("Stage: " + _stage);
     }
 }
