@@ -32,6 +32,14 @@ public class BookInterface : MonoBehaviour
     [SerializeField]
     Texture _crossImage;
 
+    [Header("Styles")]
+    [SerializeField]
+    TMP_FontAsset _goodWriting;
+    [SerializeField]
+    TMP_FontAsset _badWriting;
+    [SerializeField]
+    TMP_FontAsset _reallyBadWriting;
+
     [Header("Initial Data")]
     [SerializeField]
     int _dayNumber;
@@ -106,8 +114,33 @@ public class BookInterface : MonoBehaviour
 
     public void ResetTasks()
     {
+        _task1Text.text = "";
+        _task2Text.text = "";
+        _task3Text.text = "";
         _task1Checkmark.gameObject.SetActive(false);
         _task2Checkmark.gameObject.SetActive(false);
         _task3Checkmark.gameObject.SetActive(false);
+    }
+
+    public void SetWriting(int level)
+    {
+        switch (level)
+        {
+            case 1:
+                _entryText.font = _goodWriting;
+                _task1Text.font = _goodWriting;
+                break;
+            case 2:
+                _entryText.font = _badWriting;
+                _task1Text.font = _badWriting;
+                break;
+            case 3:
+                _entryText.font = _reallyBadWriting;
+                _task1Text.font = _reallyBadWriting;
+                break;
+            default:
+                Debug.LogError("Writing level must be between 1 and 3.");
+                break;
+        }
     }
 }

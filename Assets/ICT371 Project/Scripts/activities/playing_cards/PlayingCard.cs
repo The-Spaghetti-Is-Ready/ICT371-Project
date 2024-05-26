@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
 
-[RequireComponent(typeof(XRGrabInteractable))]
 public class PlayingCard : MonoBehaviour
 {
     public enum CardSide
@@ -50,6 +49,9 @@ public class PlayingCard : MonoBehaviour
     private void Awake()
     {
         _back = Resources.Load<Material>(k_MatPath + "Black_PlayingCards_Back_00");
+        var interactable = gameObject.GetComponent<XRSimpleInteractable>();
+        interactable.activated.AddListener(OnActivate);
+        interactable.enabled = false;
     }
 
     private void OnMouseOver()
@@ -59,12 +61,6 @@ public class PlayingCard : MonoBehaviour
                 MemoryGame.Instance.Select(this);
     }
 
-    private void Start()
-    {
-        _xrGrabInteractable = gameObject.GetComponent<XRGrabInteractable>();
-        _xrGrabInteractable.activated.AddListener(OnActivate);
-    }
-
     private const string k_MatPath = "Materials/PlayingCards/";
 
     private Material _back;
@@ -72,5 +68,4 @@ public class PlayingCard : MonoBehaviour
     private string _rank;
     private bool _selected;
     private string _suit;
-    private XRGrabInteractable _xrGrabInteractable;
 }

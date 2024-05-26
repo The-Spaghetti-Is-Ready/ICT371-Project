@@ -8,18 +8,24 @@ public class NarrativeSystem : MonoBehaviour
 {
     [SerializeField]
     UnityEvent _onDayStart;
+    
     [SerializeField]
     UnityEvent _onDayEnd;
-    [SerializeField] BookInterface _bookInterface;
-    [SerializeField] List<Day> _days;
+    
+    [SerializeField] 
+    List<Day> _days;
 
-    [SerializeField] PlayerStatus _playerInterface;
+    [SerializeField] 
+    BookInterface _bookInterface;
+
+    // [SerializeField] PlayerStatus _playerInterface;
 
     private static NarrativeSystem _instance;
 
     // Narrative properties
     // -----------------------------------------------------------------
     int _currentDayIndex = 0;
+    int _completedActivities = 0;
     // -----------------------------------------------------------------
 
     void Awake()
@@ -73,6 +79,15 @@ public class NarrativeSystem : MonoBehaviour
             return;
         }
 
+        // reset task completion status
+        _bookInterface.ResetTasks();
+
+        // update the book day number
+        _bookInterface.SetDayNumber(_currentDayIndex + 1);
+
+        // update the book entry
+        _bookInterface.SetEntryText(_days[_currentDayIndex].diaryEntry);
+
         // get activities for current day
         var activities = _days[_currentDayIndex].ActivityList;
 
@@ -94,23 +109,18 @@ public class NarrativeSystem : MonoBehaviour
             activity.OnEnd.AddListener(() =>
             {
                 _bookInterface.SetTaskCompletion(currentIndex + 1, activity.IsWon);
+
+                _completedActivities++;
+
+                if (_completedActivities >= activities.Count)
+                {
+                    EndDay();
+                }
             });
         }
 
-        // reset task completion status
-        _bookInterface.ResetTasks();
-
         // start the current day
         _days[_currentDayIndex].StartDay();
-
-        // update the book day number
-        _bookInterface.SetDayNumber(_currentDayIndex + 1);
-
-        // invoke the day start event for the narrative
-        _onDayStart.Invoke();
-
-        // update the book day number
-        _bookInterface.SetDayNumber(_currentDayIndex + 1);
 
         // invoke the day start event for the narrative
         _onDayStart.Invoke();
@@ -118,16 +128,25 @@ public class NarrativeSystem : MonoBehaviour
 
     public void EndDay()
     {
+        _days[_currentDayIndex].EndDay();
+        _onDayEnd.Invoke();
+        // _playerInterface.EvaluateDecay(_currentDayIndex);
+        // _playerInterface.EvaluateStage();
+    }
+
+    public void StartNextDay()
+    {
         if (_currentDayIndex >= _days.Count)
         {
             return;
         }
 
-        _days[_currentDayIndex++].EndDay();
-        
-        _playerInterface.EvaluateDecay(_currentDayIndex);
-        _playerInterface.EvaluateStage();
+        _currentDayIndex++;
+        StartDay();
+    }
 
-        _onDayEnd.Invoke();
+    public int GetCurrentDay()
+    {
+        return _currentDayIndex + 1;
     }
 }

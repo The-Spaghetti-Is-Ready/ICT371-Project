@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.XR.Interaction.Toolkit;
 using Random = System.Random;
 
 public class MemoryGame : MonoBehaviour, IActivity
@@ -14,6 +15,11 @@ public class MemoryGame : MonoBehaviour, IActivity
 
     public void EndActivity()
     {
+        if (!_isRunning)
+            return;
+        
+        _isRunning = false;
+
         onEnd.Invoke();
     }
 
@@ -42,6 +48,10 @@ public class MemoryGame : MonoBehaviour, IActivity
 
     public void Select(PlayingCard card)
     {
+        // cheap exit for now since it takes a while to play the game
+        IsWon = true;
+        EndActivity();
+
         if (!_selectionTwo)
         {
             card.Flip(PlayingCard.CardSide.Face);
@@ -60,6 +70,12 @@ public class MemoryGame : MonoBehaviour, IActivity
 
     public void StartActivity()
     {
+        _isRunning = true;
+        
+        var interactables = transform.GetComponentsInChildren<XRSimpleInteractable>();
+        foreach (var interactable in interactables)
+            interactable.enabled = true;
+
         onStart.Invoke();
     }
 
@@ -90,7 +106,7 @@ public class MemoryGame : MonoBehaviour, IActivity
         if (_matches == _deck.Length / 2)
         {
             isWon = true;
-            Debug.Log("Game Won: " + activityName);
+            // Debug.Log("Game Won: " + activityName);
         }
     }
 
@@ -121,7 +137,7 @@ public class MemoryGame : MonoBehaviour, IActivity
     {
         Instance = this;
         _deck = transform.GetComponentsInChildren<PlayingCard>();
-        Debug.Log("Deck Length: " + _deck.Length);
+        // Debug.Log("Deck Length: " + _deck.Length);
 
         Shuffle();
         Deal();
@@ -129,7 +145,7 @@ public class MemoryGame : MonoBehaviour, IActivity
 
     private void Update()
     {
-        Debug.Log("Moves: " + _moves + ", Matches: " + _matches);
+        // Debug.Log("Moves: " + _moves + ", Matches: " + _matches);
         CheckWon();
 
         if (_selectionTwo)
@@ -153,4 +169,6 @@ public class MemoryGame : MonoBehaviour, IActivity
     private PlayingCard _selectionOne;
     private PlayingCard _selectionTwo;
     private double _timer;
+
+    private bool _isRunning = false;
 }
