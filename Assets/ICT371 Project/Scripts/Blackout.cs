@@ -26,6 +26,8 @@ public class Blackout : MonoBehaviour
             _blackoutMaterial.color = new Color(0, 0, 0, alpha);
             yield return null;
         }
+
+        _blackoutMaterial.color = new Color(0, 0, 0, 1);
     }
 
     IEnumerator FadeInCoroutine()
@@ -37,5 +39,7 @@ public class Blackout : MonoBehaviour
             _blackoutMaterial.color = new Color(0, 0, 0, alpha);
             yield return null;
         }
+
+        _blackoutMaterial.color = new Color(0, 0, 0, 0);
     }
 }
