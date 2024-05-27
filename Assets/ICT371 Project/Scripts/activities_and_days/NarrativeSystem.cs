@@ -88,6 +88,9 @@ public class NarrativeSystem : MonoBehaviour
         // update the book entry
         _bookInterface.SetEntryText(_days[_currentDayIndex].diaryEntry);
 
+        // reset completed activities
+        _completedActivities = 0;
+
         // get activities for current day
         var activities = _days[_currentDayIndex].ActivityList;
 

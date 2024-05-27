@@ -71,7 +71,7 @@ public class MemoryGame : MonoBehaviour, IActivity
     public void StartActivity()
     {
         _isRunning = true;
-        
+
         var interactables = transform.GetComponentsInChildren<XRSimpleInteractable>();
         foreach (var interactable in interactables)
             interactable.enabled = true;

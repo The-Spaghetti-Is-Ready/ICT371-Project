@@ -17,6 +17,11 @@ public class Blackout : MonoBehaviour
         StartCoroutine(FadeInCoroutine());
     }
 
+    public void Reset()
+    {
+        _blackoutMaterial.color = new Color(0, 0, 0, 0);
+    }
+
     IEnumerator FadeOutCoroutine()
     {
         float alpha = 0;
