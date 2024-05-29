@@ -129,14 +129,20 @@ public class BookInterface : MonoBehaviour
             case 1:
                 _entryText.font = _goodWriting;
                 _task1Text.font = _goodWriting;
+                _task2Text.font = _goodWriting;
+                _task3Text.font = _goodWriting;
                 break;
             case 2:
                 _entryText.font = _badWriting;
                 _task1Text.font = _badWriting;
+                _task2Text.font = _badWriting;
+                _task3Text.font = _badWriting;
                 break;
             case 3:
                 _entryText.font = _reallyBadWriting;
                 _task1Text.font = _reallyBadWriting;
+                _task2Text.font = _reallyBadWriting;
+                _task3Text.font = _reallyBadWriting;
                 break;
             default:
                 Debug.LogError("Writing level must be between 1 and 3.");
