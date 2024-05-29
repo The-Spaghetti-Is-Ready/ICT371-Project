@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FadeOut : MonoBehaviour
+public class EndGame : MonoBehaviour
 {
     [SerializeField]
-    Blackout _blackout;
+    float _delay = 5.0f;
 
-    public void EndGame()
+    public void End()
     {
-        // _blackout.FadeOut();
-        StartCoroutine(WaitAndAdvance());
+        StartCoroutine(WaitAndEnd());
     }
 
-    IEnumerator WaitAndAdvance()
+    IEnumerator WaitAndEnd()
     {
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(_delay);
         #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
         #else
