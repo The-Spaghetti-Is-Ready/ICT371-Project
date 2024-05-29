@@ -8,12 +8,18 @@ using UnityEngine.Events;
 [System.Serializable]
 public class Day : MonoBehaviour
 {   
-    public UnityEvent OnDayEnd;
+    [TextArea(15, 30)]
+    public string diaryEntry = "";
 
     [SerializeField]
     List<MonoBehaviour> _activities;
+    
     List<IActivity> _activityList;
     int _activitesCompleted = 0;
+
+    public UnityEvent OnDayStart;
+
+    public UnityEvent OnDayEnd;
 
     void Awake()
     {
@@ -31,6 +37,7 @@ public class Day : MonoBehaviour
     public void StartDay()
     {
          _activityList.ForEach(activity => activity.StartActivity());
+         OnDayStart.Invoke();
     }
 
     public void EndDay()

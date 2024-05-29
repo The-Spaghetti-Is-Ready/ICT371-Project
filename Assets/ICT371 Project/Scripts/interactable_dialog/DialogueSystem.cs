@@ -43,7 +43,7 @@ public class DialogueSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        HideDialogWindow();
+        // HideDialogWindow();
     }
 
     // Update is called once per frame
@@ -100,10 +100,11 @@ public class DialogueSystem : MonoBehaviour
             }
             else
             {
+                line.endDialogueEvent?.Invoke();
                 yield return StartCoroutine(TypeText(line.text));
             }
 
-            line.startDialogueEvent?.Invoke();
+            
             
             optionSelected = false;
         }
