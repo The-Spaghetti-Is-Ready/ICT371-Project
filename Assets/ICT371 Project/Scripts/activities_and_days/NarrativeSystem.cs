@@ -21,12 +21,7 @@ public class NarrativeSystem : MonoBehaviour
     // [SerializeField] PlayerStatus _playerInterface;
 
     private static NarrativeSystem _instance;
-
-    // Narrative properties
-    // -----------------------------------------------------------------
     int _currentDayIndex = 0;
-    int _completedActivities = 0;
-    // -----------------------------------------------------------------
 
     void Awake()
     {
@@ -42,7 +37,7 @@ public class NarrativeSystem : MonoBehaviour
 
         foreach (Day day in _days)
         {
-            day.OnDayEnd.AddListener(EndDay);
+            day.OnDayEnd.AddListener(OnDayEnd);
         }
     }
 
@@ -79,49 +74,6 @@ public class NarrativeSystem : MonoBehaviour
             return;
         }
 
-        // reset task completion status
-        _bookInterface.ResetTasks();
-
-        // update the book day number
-        _bookInterface.SetDayNumber(_currentDayIndex + 1);
-
-        // update the book entry
-        _bookInterface.SetEntryText(_days[_currentDayIndex].diaryEntry);
-
-        // reset completed activities
-        _completedActivities = 0;
-
-        // get activities for current day
-        var activities = _days[_currentDayIndex].ActivityList;
-
-        foreach (IActivity activity in activities)
-        {
-            // book can only handle 3 tasks for now
-            if (activities.IndexOf(activity) >= 3)
-            {
-                break;
-            }
-            
-            // store current index for callback
-            int currentIndex = activities.IndexOf(activity);
-
-            // update books 'tasks' with activity names
-            _bookInterface.SetTaskText(currentIndex + 1, activity.ActivityName);
-
-            // bind activity completion to book interface
-            activity.OnEnd.AddListener(() =>
-            {
-                _bookInterface.SetTaskCompletion(currentIndex + 1, activity.IsWon);
-
-                _completedActivities++;
-
-                if (_completedActivities >= activities.Count)
-                {
-                    EndDay();
-                }
-            });
-        }
-
         // start the current day
         _days[_currentDayIndex].StartDay();
 
@@ -129,9 +81,8 @@ public class NarrativeSystem : MonoBehaviour
         _onDayStart.Invoke();
     }
 
-    public void EndDay()
+    public void OnDayEnd()
     {
-        _days[_currentDayIndex].EndDay();
         _onDayEnd.Invoke();
         // _playerInterface.EvaluateDecay(_currentDayIndex);
         // _playerInterface.EvaluateStage();
@@ -148,8 +99,7 @@ public class NarrativeSystem : MonoBehaviour
         StartDay();
     }
 
-    public int GetCurrentDay()
-    {
-        return _currentDayIndex + 1;
-    }
+    public int CurrentDayNumber => _currentDayIndex + 1;
+
+    public Day CurrentDay => _days[_currentDayIndex];
 }

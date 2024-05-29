@@ -4,67 +4,36 @@ using UnityEngine;
 
 public class Monologue : MonoBehaviour
 {
-    public AudioClip _day1Start;
-    public AudioClip _day1End;
-    public AudioClip _day2Start;
-    public AudioClip _day2End;
-    public AudioClip _day3Start;
-    public AudioClip _day3End;
+    [SerializeField]
+    List<AudioClip> _clips;
+
+    [SerializeField]
+    float _delay;
 
     AudioSource _audioSource;
+
+    int _playIndex = 0;
 
     void Awake()
     {
         _audioSource = GetComponent<AudioSource>();
     }
 
-    public void playStartDay()
+    public void Play(int index)
     {
-        StartCoroutine(WaitAndPlayStart());
-    }
-
-    public void playEndDay()
-    {
-        StartCoroutine(WaitAndPlayEnd());
-    }
-
-    IEnumerator WaitAndPlayStart()
-    {
-        yield return new WaitForSeconds(3.0f);
-
-        int day = NarrativeSystem.Instance.GetCurrentDay();
-        
-        switch (day)
+        if (index < 0 || index >= _clips.Count)
         {
-            case 1:
-                _audioSource.PlayOneShot(_day1Start);
-                break;
-            case 2:
-                _audioSource.PlayOneShot(_day2Start);
-                break;
-            case 3:
-                _audioSource.PlayOneShot(_day3Start);
-                break;
+            Debug.LogError("Monologue play index out of range");
+            return;
         }
+
+        _playIndex = index;
+        StartCoroutine(WaitAndPlay());
     }
 
-    IEnumerator WaitAndPlayEnd()
+    IEnumerator WaitAndPlay()
     {
-        yield return new WaitForSeconds(3.0f);
-
-        int day = NarrativeSystem.Instance.GetCurrentDay();
-        
-        switch (day)
-        {
-            case 1:
-                _audioSource.PlayOneShot(_day1End);
-                break;
-            case 2:
-                _audioSource.PlayOneShot(_day2End);
-                break;
-            case 3:
-                _audioSource.PlayOneShot(_day3End);
-                break;
-        }
+        yield return new WaitForSeconds(_delay);
+        _audioSource.PlayOneShot(_clips[_playIndex]);
     }
 }

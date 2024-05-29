@@ -9,7 +9,7 @@ public class FadeOut : MonoBehaviour
 
     public void EndGame()
     {
-        _blackout.FadeOut();
+        // _blackout.FadeOut();
         StartCoroutine(WaitAndAdvance());
     }
 

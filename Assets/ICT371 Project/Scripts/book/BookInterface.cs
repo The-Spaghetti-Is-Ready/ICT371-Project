@@ -143,4 +143,34 @@ public class BookInterface : MonoBehaviour
                 break;
         }
     }
+
+    public void UpdateBook()
+    {
+        ResetTasks();
+        SetDayNumber(NarrativeSystem.Instance.CurrentDayNumber);
+        SetEntryText(NarrativeSystem.Instance.CurrentDay.diaryEntry);
+
+        var activities = NarrativeSystem.Instance.CurrentDay.ActivityList;
+
+        foreach (IActivity activity in activities)
+        {
+            // book can only handle 3 tasks for now
+            if (activities.IndexOf(activity) >= 3)
+            {
+                break;
+            }
+            
+            // store current index for callback
+            int currentIndex = activities.IndexOf(activity);
+
+            // update books 'tasks' with activity names
+            SetTaskText(currentIndex + 1, activity.ActivityName);
+
+            // bind activity completion to book interface
+            activity.OnEnd.AddListener(() =>
+            {
+                SetTaskCompletion(currentIndex + 1, activity.IsWon);
+            });
+        }
+    }
 }
