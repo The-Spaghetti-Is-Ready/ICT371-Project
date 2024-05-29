@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.iOS;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class NarrativeSystem : MonoBehaviour
 {
@@ -15,10 +16,11 @@ public class NarrativeSystem : MonoBehaviour
     [SerializeField] 
     List<Day> _days;
 
-    [SerializeField] 
-    BookInterface _bookInterface;
+    [SerializeField]
+    List<GameObject> _nextDayActivators;
 
-    // [SerializeField] PlayerStatus _playerInterface;
+    [SerializeField]
+    CameraFade _cameraFade;
 
     private static NarrativeSystem _instance;
     int _currentDayIndex = 0;
@@ -38,6 +40,14 @@ public class NarrativeSystem : MonoBehaviour
         foreach (Day day in _days)
         {
             day.OnDayEnd.AddListener(OnDayEnd);
+        }
+
+        foreach (GameObject activator in _nextDayActivators)
+        {
+            var interactable = activator.AddComponent<XRSimpleInteractable>();
+            interactable.activated.AddListener(StartNextDay);
+            interactable.activated.AddListener((args) => { interactable.enabled = false; });
+            interactable.enabled = false;
         }
     }
 
@@ -73,6 +83,15 @@ public class NarrativeSystem : MonoBehaviour
         {
             return;
         }
+        
+        // fade camera in
+        _cameraFade.FadeIn(2.0f);
+
+        // disable the next day activator for the previous day
+        if (_currentDayIndex > 0)
+        {
+            _nextDayActivators[_currentDayIndex - 1].GetComponent<XRSimpleInteractable>().enabled = false;
+        }
 
         // start the current day
         _days[_currentDayIndex].StartDay();
@@ -83,12 +102,16 @@ public class NarrativeSystem : MonoBehaviour
 
     public void OnDayEnd()
     {
+        // activate the activator for the next day
+        if (_currentDayIndex < _nextDayActivators.Count)
+        {
+            _nextDayActivators[_currentDayIndex].GetComponent<XRSimpleInteractable>().enabled = true;
+        }
+
         _onDayEnd.Invoke();
-        // _playerInterface.EvaluateDecay(_currentDayIndex);
-        // _playerInterface.EvaluateStage();
     }
 
-    public void StartNextDay()
+    public void StartNextDay(ActivateEventArgs args)
     {
         if (_currentDayIndex >= _days.Count)
         {
@@ -96,7 +119,8 @@ public class NarrativeSystem : MonoBehaviour
         }
 
         _currentDayIndex++;
-        StartDay();
+        _cameraFade.FadeOut(2.0f);
+        Invoke("StartDay", 2.5f);
     }
 
     public int CurrentDayNumber => _currentDayIndex + 1;
