@@ -19,6 +19,7 @@ public class MemoryGame : MonoBehaviour, IActivity
             return;
         
         _isRunning = false;
+        CancelInvoke("DeductTimeLimitSeconds");
 
         onEnd.Invoke();
     }
@@ -71,6 +72,8 @@ public class MemoryGame : MonoBehaviour, IActivity
         var interactables = transform.GetComponentsInChildren<XRSimpleInteractable>();
         foreach (var interactable in interactables)
             interactable.enabled = true;
+
+        InvokeRepeating("DeductTimeLimitSeconds", 1.0f, 1.0f);
 
         onStart.Invoke();
     }
@@ -155,8 +158,6 @@ public class MemoryGame : MonoBehaviour, IActivity
         if (_selectionTwo)
             if (Time.time > _timer + 2.0)
                 CheckMatch();
-
-        Invoke("DeductTimeLimitSeconds", 1.0f);
     }
 
     private void DeductTimeLimitSeconds()
