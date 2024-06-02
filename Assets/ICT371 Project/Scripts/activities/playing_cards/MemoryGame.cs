@@ -102,7 +102,15 @@ public class MemoryGame : MonoBehaviour, IActivity
         if (_matches == _deck.Length / 2)
         {
             isWon = true;
+            EndActivity();
             // Debug.Log("Game Won: " + activityName);
+        }
+
+        if (_timeLimitSeconds <= 0)
+        {
+            isWon = false;
+            EndActivity();
+            // Debug.Log("Game Lost: " + activityName);
         }
     }
 
@@ -147,6 +155,13 @@ public class MemoryGame : MonoBehaviour, IActivity
         if (_selectionTwo)
             if (Time.time > _timer + 2.0)
                 CheckMatch();
+
+        Invoke("DeductTimeLimitSeconds", 1.0f);
+    }
+
+    private void DeductTimeLimitSeconds()
+    {
+        _timeLimitSeconds -= 1;
     }
 
     private static readonly string[] Suits = { "Club", "Diamond", "Heart", "Spade" };
@@ -158,6 +173,9 @@ public class MemoryGame : MonoBehaviour, IActivity
     [SerializeField] private bool isWon;
     [SerializeField] private UnityEvent onEnd;
     [SerializeField] private UnityEvent onStart;
+    
+    [SerializeField] [Range(1, 30)]
+    private int _timeLimitSeconds = 10;
 
     private PlayingCard[] _deck;
     private int _matches;
