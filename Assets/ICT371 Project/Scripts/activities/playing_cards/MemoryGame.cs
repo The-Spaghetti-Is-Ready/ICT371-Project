@@ -48,10 +48,6 @@ public class MemoryGame : MonoBehaviour, IActivity
 
     public void Select(PlayingCard card)
     {
-        // cheap exit for now since it takes a while to play the game
-        IsWon = true;
-        EndActivity();
-
         if (!_selectionTwo)
         {
             card.Flip(PlayingCard.CardSide.Face);
