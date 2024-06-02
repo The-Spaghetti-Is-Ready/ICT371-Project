@@ -19,6 +19,7 @@ public class MemoryGame : MonoBehaviour, IActivity
             return;
         
         _isRunning = false;
+        CancelInvoke("DeductTimeLimitSeconds");
 
         onEnd.Invoke();
     }
@@ -48,10 +49,6 @@ public class MemoryGame : MonoBehaviour, IActivity
 
     public void Select(PlayingCard card)
     {
-        // cheap exit for now since it takes a while to play the game
-        IsWon = true;
-        EndActivity();
-
         if (!_selectionTwo)
         {
             card.Flip(PlayingCard.CardSide.Face);
@@ -75,6 +72,8 @@ public class MemoryGame : MonoBehaviour, IActivity
         var interactables = transform.GetComponentsInChildren<XRSimpleInteractable>();
         foreach (var interactable in interactables)
             interactable.enabled = true;
+
+        InvokeRepeating("DeductTimeLimitSeconds", 1.0f, 1.0f);
 
         onStart.Invoke();
     }
@@ -106,7 +105,15 @@ public class MemoryGame : MonoBehaviour, IActivity
         if (_matches == _deck.Length / 2)
         {
             isWon = true;
+            EndActivity();
             // Debug.Log("Game Won: " + activityName);
+        }
+
+        if (_timeLimitSeconds <= 0)
+        {
+            isWon = false;
+            EndActivity();
+            // Debug.Log("Game Lost: " + activityName);
         }
     }
 
@@ -153,6 +160,11 @@ public class MemoryGame : MonoBehaviour, IActivity
                 CheckMatch();
     }
 
+    private void DeductTimeLimitSeconds()
+    {
+        _timeLimitSeconds -= 1;
+    }
+
     private static readonly string[] Suits = { "Club", "Diamond", "Heart", "Spade" };
 
     private static readonly string[] Ranks =
@@ -162,6 +174,9 @@ public class MemoryGame : MonoBehaviour, IActivity
     [SerializeField] private bool isWon;
     [SerializeField] private UnityEvent onEnd;
     [SerializeField] private UnityEvent onStart;
+    
+    [SerializeField] [Range(1, 30)]
+    private int _timeLimitSeconds = 10;
 
     private PlayingCard[] _deck;
     private int _matches;
