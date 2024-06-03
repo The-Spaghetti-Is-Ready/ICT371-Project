@@ -13,12 +13,18 @@ using UnityEngine.Events;
 [System.Serializable]
 public class Day : MonoBehaviour
 {   
+    /// <summary>
+    /// The diary entry for the day
+    /// </summary>
     [TextArea(15, 30)]
     public string diaryEntry = "";
 
     [SerializeField]
     List<MonoBehaviour> _activities;
     
+    /// <summary>
+    /// The list of activities for the day.
+    /// </summary>
     List<IActivity> _activityList;
     int _activitesCompleted = 0;
 
