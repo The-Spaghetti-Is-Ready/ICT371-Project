@@ -6,6 +6,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
+/// <Author>
+/// Lane O'Rafferty
+/// </Author>
+/// <Summary>
+/// This class is responsible for controlling the book's (diary's) displayed information.
+/// </Summary>
 public class BookInterface : MonoBehaviour
 {
     [Header("Components")]
@@ -52,6 +58,9 @@ public class BookInterface : MonoBehaviour
     [SerializeField]
     string _task3TextData;
 
+    /// <summary>
+    /// Sets the initial data for the book.
+    /// </summary>
     void Awake()
     {
         SetDayNumber(_dayNumber);
@@ -61,16 +70,29 @@ public class BookInterface : MonoBehaviour
         SetTaskText(3, _task3TextData);
     }
 
+    /// <summary>
+    /// Sets the day number displayed on the book.
+    /// </summary>
+    /// <param name="dayNumber">The day number to set.</param>
     public void SetDayNumber(int dayNumber)
     {
         _dayNumberText.text = dayNumber.ToString();
     }
 
+    /// <summary>
+    /// Sets the entry text displayed on the book.
+    /// </summary>
+    /// <param name="entryText">The entry text to set.</param>
     public void SetEntryText(string entryText)
     {
         _entryText.text = entryText;
     }
 
+    /// <summary>
+    /// Sets the task text displayed on the book.
+    /// </summary>
+    /// <param name="taskNumber">The task number to set.</param>
+    /// <param name="taskText">The task text to set.</param>
     public void SetTaskText(int taskNumber, string taskText)
     {
         switch (taskNumber)
@@ -90,6 +112,11 @@ public class BookInterface : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the task completion status and displays the appropriate checkmark or cross image.
+    /// </summary>
+    /// <param name="taskNumber">The task number to set.</param>
+    /// <param name="isWon">The completion status of the task.</param>
     public void SetTaskCompletion(int taskNumber, bool isWon)
     {
         switch (taskNumber)
@@ -112,6 +139,9 @@ public class BookInterface : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Resets the task text and completion status.
+    /// </summary>
     public void ResetTasks()
     {
         _task1Text.text = "";
@@ -122,6 +152,10 @@ public class BookInterface : MonoBehaviour
         _task3Checkmark.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// Sets the writing style of the book based on the specified level.
+    /// </summary>
+    /// <param name="level">The writing level to set.</param>
     public void SetWriting(int level)
     {
         switch (level)
@@ -150,6 +184,9 @@ public class BookInterface : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Updates the book with the current day's data.
+    /// </summary>
     public void UpdateBook()
     {
         ResetTasks();
