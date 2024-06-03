@@ -5,6 +5,15 @@ using UnityEngine.Events;
 using UnityEngine.iOS;
 using UnityEngine.XR.Interaction.Toolkit;
 
+/// <Author>
+/// Lane O'Rafferty
+/// </Author>
+/// <summary>
+/// This class manages story progression and day transitions.
+/// </summary>
+/// <remarks>
+/// This class is a singleton.
+/// </remarks>
 public class NarrativeSystem : MonoBehaviour
 {
     [SerializeField]
@@ -22,9 +31,19 @@ public class NarrativeSystem : MonoBehaviour
     [SerializeField]
     CameraFade _cameraFade;
 
+    /// <summary>
+    /// The singleton instance of the NarrativeSystem.
+    /// </summary>
     private static NarrativeSystem _instance;
+
+    /// <summary>
+    /// The index of the current day.
+    /// </summary>
     int _currentDayIndex = 0;
 
+    /// <summary>
+    /// Ensures the singleton mono instance and persistance.
+    /// </summary>
     void Awake()
     {
         if (_instance == null)
@@ -51,6 +70,9 @@ public class NarrativeSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Gets the singleton instance of the NarrativeSystem.
+    /// </summary>
     public static NarrativeSystem Instance
     {
         get
@@ -76,6 +98,9 @@ public class NarrativeSystem : MonoBehaviour
         StartDay();
     }
 
+    /// <summary>
+    /// Starts the current day.
+    /// </summary>
     public void StartDay()
     {
         // bounds check
@@ -100,6 +125,9 @@ public class NarrativeSystem : MonoBehaviour
         _onDayStart.Invoke();
     }
 
+    /// <summary>
+    /// Called when the day ends.
+    /// </summary>
     public void OnDayEnd()
     {
         // activate the activator for the next day
@@ -111,6 +139,9 @@ public class NarrativeSystem : MonoBehaviour
         _onDayEnd.Invoke();
     }
 
+    /// <summary>
+    /// Starts the next day.
+    /// </summary>
     public void StartNextDay(ActivateEventArgs args)
     {
         if (_currentDayIndex >= _days.Count)
@@ -123,7 +154,13 @@ public class NarrativeSystem : MonoBehaviour
         Invoke("StartDay", 2.5f);
     }
 
+    /// <summary>
+    /// Gets the current day number.
+    /// </summary>
     public int CurrentDayNumber => _currentDayIndex + 1;
 
+    /// <summary>
+    /// Gets the current day.
+    /// </summary>
     public Day CurrentDay => _days[_currentDayIndex];
 }
